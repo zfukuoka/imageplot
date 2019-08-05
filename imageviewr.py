@@ -10,12 +10,13 @@ import datetime
 
 def rgb_normalization():
   # 仮実装
+  RGB_RESOLUTION = 255
 
   # テストデータで0～255のRGB256諧調を前提とする
   test_np = np.arange(27).reshape(3,3,3)
 
   # 0～1の間で正規化
-  test_np2 = test_np/255
+  test_np2 = test_np / RGB_RESOLUTION
   print(test_np.shape)
   print(test_np)
   print(test_np2)
@@ -51,5 +52,5 @@ def viewer():
 
   plt.show()
 
-viewer()
-#rgb_normalization()
+#viewer()
+rgb_normalization()
