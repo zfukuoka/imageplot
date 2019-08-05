@@ -8,23 +8,18 @@ from matplotlib import pylab as plt
 import csv
 import datetime
 
-def rgb_normalization():
-  # 仮実装
+def rgb_normalization(originPixel):
+  # JPEGを前提として、RGBの各々の解像度8bit(255)と定義
   RGB_RESOLUTION = 255
 
-  # テストデータで0～255のRGB256諧調を前提とする
-  test_np = np.arange(27).reshape(3,3,3)
-
   # 0～1の間で正規化
-  test_np2 = test_np / RGB_RESOLUTION
-  print(test_np.shape)
-  print(test_np)
-  print(test_np2)
+  tempPixel = originPixel / RGB_RESOLUTION
 
   # ガンマ補正を元に戻し、リニア化
+  #   正規化値  <= 0.04045 : 正規化値 / 12.92
+  #   正規化値  >  0.04045 : ((正規化値 + 0.055) / 1.055) に 2.4階乗
   LINEAR_THR = 0.04045
-  print(np.piecewise(test_np2, [test_np2 <= LINEAR_THR, test_np2 > LINEAR_THR], [0, 1]))
-  print(np.piecewise(test_np2, [test_np2 <= LINEAR_THR, test_np2 > LINEAR_THR], [lambda test_np2: test_np2/12.92, lambda test_np2: ((test_np2+0.055)/1.055)**2.4]))
+  return np.piecewise(tempPixel, [tempPixel <= LINEAR_THR, tempPixel > LINEAR_THR], [lambda tempPixel: tempPixel/12.92, lambda tempPixel: ((tempPixel+0.055)/1.055)**2.4])
 
 
 def viewer():
@@ -53,4 +48,11 @@ def viewer():
   plt.show()
 
 #viewer()
-rgb_normalization()
+
+# テストデータで0～255のRGB256諧調を前提とする
+test_np = np.arange(27).reshape(3,3,3)
+#test_np = np.linspace(228, 255, 27).reshape(3,3,3)
+test_np2 = rgb_normalization(test_np)
+
+print(test_np)
+print(test_np2)
