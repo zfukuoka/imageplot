@@ -8,7 +8,7 @@ from matplotlib import pylab as plt
 import csv
 import datetime
 
-def rgb_normalization(originPixel):
+def normalizeRgb(originPixel):
   # JPEGを前提として、RGBの各々の解像度8bit(255)と定義
   RGB_RESOLUTION = 255
 
@@ -20,6 +20,12 @@ def rgb_normalization(originPixel):
   #   正規化値  >  0.04045 : ((正規化値 + 0.055) / 1.055) に 2.4階乗
   LINEAR_THR = 0.04045
   return np.piecewise(tempPixel, [tempPixel <= LINEAR_THR, tempPixel > LINEAR_THR], [lambda tempPixel: tempPixel/12.92, lambda tempPixel: ((tempPixel+0.055)/1.055)**2.4])
+
+def convertToCieXYZ(normalizedRgb):
+  # RGB of sRGB color space to CIE XYZ convert matrix
+  MATRIX = np.array([[0.412424, 0.357579, 0.180464],[0.212656, 0.715158, 0.072186],[0.019332, 0.119193, 0.950444]], dtype='float32')
+
+  return np.dot(MATRIX, normalizedRgb)
 
 
 def viewer():
@@ -50,9 +56,20 @@ def viewer():
 #viewer()
 
 # テストデータで0～255のRGB256諧調を前提とする
-test_np = np.arange(27).reshape(3,3,3)
+#test_np = np.arange(27).reshape(3,3,3)
 #test_np = np.linspace(228, 255, 27).reshape(3,3,3)
-test_np2 = rgb_normalization(test_np)
+# sRGB Red Green Blue White point
+#test_np = np.array([255, 0, 0])
+#test_np = np.array([0, 255, 0])
+#test_np = np.array([0, 0, 255])
+test_np = np.array([255, 255, 255])
+
+test_np2 = normalizeRgb(test_np)
+test_np3 = convertToCieXYZ(test_np2)
 
 print(test_np)
 print(test_np2)
+print(test_np3)
+print(test_np3[0]/(test_np3[0]+test_np3[1]+test_np3[2]))
+print(test_np3[1]/(test_np3[0]+test_np3[1]+test_np3[2]))
+print(test_np3[2]/(test_np3[0]+test_np3[1]+test_np3[2]))
