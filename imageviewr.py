@@ -4,7 +4,8 @@
 # 必要なライブラリのimport
 from PIL import Image
 import numpy as np
-from matplotlib import pylab as plt
+#from matplotlib import pylab as plt
+from matplotlib import pyplot as plt
 import csv
 import datetime
 
@@ -64,35 +65,59 @@ def viewer():
     skip = int(img_x / MAX_IMG_WIDTH) + 1
   else:
     skip = int(img_y / MAX_IMG_WIDTH) + 1
+
+  # 処理時間がかかるため、追加で固定値で間引き
+  skip *= 4
   im_list2 = im_list[::skip,::skip,::]
+
+  # RGB to CIE xyz
+  normalizedRGB = normalizeRgb(im_list2)
+  cieXYZ = convertToCieXYZ(normalizedRGB)
+  ciexyz = convertToCiexyz(cieXYZ)
+  
+  # pick up x and y for ploting
+  x = ciexyz[0:, 0]
+  y = ciexyz[0:, 1]
 
   # 画像とグラフの同時表示
   fig = plt.figure(figsize=(16,8))
-  fig.subplots_adjust(wspace=10)
+  fig.subplots_adjust(wspace=0)
 
-  ax_img  = fig.add_subplot(111)
-  ax_plot = fig.add_subplot(122)
+  # 画像表示
+  ax_img  = fig.add_subplot(121)
   ax_img.imshow(im_list2)
+
+  # CIE xy のプロット
+  # RGBWのCIE xy座標
+  POLARS = np.array([[0.64, 0.33], [0.30, 0.60], [0.15, 0.06], [0.3127, 0.3290]])
+  ax_plot = fig.add_subplot(122)
+  ax_plot.plot(x, y, "k,")
+  ax_plot.plot(POLARS[0:,0], POLARS[0:,1], "ro")
+
+  plt.xlim(0, 1.0)
+  plt.ylim(0, 1.0)
+  print('speed(edjp): ', datetime.datetime.now())
 
   plt.show()
 
-#viewer()
+
+viewer()
 
 # テストデータで0～255のRGB256諧調を前提とする
 #test_np = np.arange(27).reshape(3,3,3)
 #test_np = np.linspace(228, 255, 27).reshape(3,3,3)
 # sRGB Red Green Blue White point
-test_np = np.array(
-    [ [[255, 0, 0], [0, 255, 0]],
-      [[0, 0, 255], [255, 255, 255]] ])
-
-test_np2 = normalizeRgb(test_np)
-test_np3 = convertToCieXYZ(test_np2)
-test_np4 = convertToCiexyz(test_np3)
-
-print("test_np2")
-print(test_np2)
-print("test_np3")
-print(test_np3)
-print("test_np4")
-print(test_np4)
+#test_np = np.array(
+#    [ [[255, 0, 0], [0, 255, 0]],
+#      [[0, 0, 255], [255, 255, 255]] ])
+#
+#test_np2 = normalizeRgb(test_np)
+#test_np3 = convertToCieXYZ(test_np2)
+#test_np4 = convertToCiexyz(test_np3)
+#
+#print("test_np2")
+#print(test_np2)
+#print("test_np3")
+#print(test_np3)
+#print("test_np4")
+#print(test_np4)
