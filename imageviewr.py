@@ -6,7 +6,7 @@ from PIL import Image
 import numpy as np
 #from matplotlib import pylab as plt
 from matplotlib import pyplot as plt
-import csv
+#import csv
 import datetime
 
 def normalizeRgb(originPixel):
@@ -81,21 +81,25 @@ def viewer():
 
   # 画像とグラフの同時表示
   fig = plt.figure(figsize=(16,8))
-  fig.subplots_adjust(wspace=0)
+  fig.subplots_adjust(wspace=0.2)
 
   # 画像表示
-  ax_img  = fig.add_subplot(121)
+  ax_img = fig.add_subplot(121)
   ax_img.imshow(im_list2)
+  ax_img.set_title("Image")
 
   # CIE xy のプロット
   # RGBWのCIE xy座標
   POLARS = np.array([[0.64, 0.33], [0.30, 0.60], [0.15, 0.06], [0.3127, 0.3290]])
   ax_plot = fig.add_subplot(122)
-  ax_plot.plot(x, y, "k,")
-  ax_plot.plot(POLARS[0:,0], POLARS[0:,1], "ro")
+  ax_plot.plot(POLARS[0:,0], POLARS[0:,1], "ro", label="R/G/B polar and white point in sRGB color space")
+  ax_plot.plot(x, y, "k,", label="color in image")
 
-  plt.xlim(0, 1.0)
-  plt.ylim(0, 1.0)
+  ax_plot.set_xlim(0, 1.0)
+  ax_plot.set_ylim(0, 1.0)
+  ax_plot.legend()
+  ax_plot.set_aspect('equal')
+  ax_plot.set_title("CIE xy")
   print('speed(edjp): ', datetime.datetime.now())
 
   plt.show()
