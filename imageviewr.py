@@ -6,6 +6,7 @@ from PIL import Image
 import numpy as np
 #from matplotlib import pylab as plt
 from matplotlib import pyplot as plt
+from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 #import csv
 import datetime
 
@@ -95,8 +96,16 @@ def viewer():
   ax_plot.plot(POLARS[0:,0], POLARS[0:,1], "ro", label="R/G/B polar and white point in sRGB color space")
   ax_plot.plot(x, y, "k,", label="color in image")
 
+  # 描画の補助情報(描画範囲、メジャーなメモリ(0.1単位)とグリッド線、マイナーなメモリ(メジャーの５分割))
   ax_plot.set_xlim(0, 1.0)
   ax_plot.set_ylim(0, 1.0)
+  ax_plot.xaxis.set_major_locator(MultipleLocator(0.1))
+  ax_plot.yaxis.set_major_locator(MultipleLocator(0.1))
+  ax_plot.grid(linestyle="--", zorder=-10)
+  ax_plot.xaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot.yaxis.set_minor_locator(AutoMinorLocator(5))
+  #ax_plot.tick_params(axis='both', which='major', width=1.0, length=10)
+  #ax_plot.tick_params(axis='both', which='minor', width=1.0, length=5, color='0.25')
   ax_plot.legend()
   ax_plot.set_aspect('equal')
   ax_plot.set_title("CIE xy")
