@@ -93,8 +93,8 @@ def viewer():
   # RGBWのCIE xy座標
   POLARS = np.array([[0.64, 0.33], [0.30, 0.60], [0.15, 0.06], [0.3127, 0.3290]])
   ax_plot = fig.add_subplot(122)
-  ax_plot.plot(POLARS[0:,0], POLARS[0:,1], "ro", label="R/G/B polar and white point in sRGB color space")
-  ax_plot.plot(x, y, "k,", label="color in image")
+  ax_plot.plot(POLARS[0:,0], POLARS[0:,1], "r+", label="R/G/B polar and white point in sRGB color space")
+  ax_plot.plot(x, y, 'k.', alpha=0.3, label="color in image")
 
   # 描画の補助情報(描画範囲、メジャーなメモリ(0.1単位)とグリッド線、マイナーなメモリ(メジャーの５分割))
   ax_plot.set_xlim(0, 1.0)
