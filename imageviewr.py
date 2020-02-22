@@ -10,18 +10,21 @@ from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 #import csv
 import datetime
 
+DEFAULT_DTYPE = np.float32
+
 def normalizeRgb(originPixel):
   # JPEGを前提として、RGBの各々の解像度8bit(255)と定義
   RGB_RESOLUTION = 255
 
   # 0～1の間で正規化
-  tempPixel = originPixel / RGB_RESOLUTION
+  tempPixel = (originPixel / RGB_RESOLUTION).astype(DEFAULT_DTYPE)
 
   # ガンマ補正を元に戻し、リニア化
   #   正規化値  <= 0.04045 : 正規化値 / 12.92
   #   正規化値  >  0.04045 : ((正規化値 + 0.055) / 1.055) に 2.4階乗
   LINEAR_THR = 0.04045
-  return np.piecewise(tempPixel, [tempPixel <= LINEAR_THR, tempPixel > LINEAR_THR], [lambda tempPixel: tempPixel/12.92, lambda tempPixel: ((tempPixel+0.055)/1.055)**2.4])
+  ret_arr =  np.piecewise(tempPixel, [tempPixel <= LINEAR_THR, tempPixel > LINEAR_THR], [lambda tempPixel: tempPixel/12.92, lambda tempPixel: ((tempPixel+0.055)/1.055)**2.4])
+  return ret_arr.astype(DEFAULT_DTYPE)
 
 # convert from normalized RGB to CIE XYZ
 def convertToCieXYZ(normalizedRgb):
@@ -29,7 +32,7 @@ def convertToCieXYZ(normalizedRgb):
   MATRIX = np.array([[0.412424, 0.357579, 0.180464],[0.212656, 0.715158, 0.072186],[0.019332, 0.119193, 0.950444]], dtype='float32')
 
   # 画像を１次元に並べ、ループで画素毎にRGBからXYZを算出
-  ret_arr = np.empty((0,3), dtype='float32')
+  ret_arr = np.empty((0,3), dtype=DEFAULT_DTYPE)
   temp = normalizedRgb.reshape(-1, 3)
   (number, _) = temp.shape
 
@@ -44,7 +47,7 @@ def convertToCiexyz(cieXYZ):
   #   x = X / (X + Y + Z)
   #   y = Y / (X + Y + Z)
   #   z = Z / (X + Y + Z)
-  ret_arr = np.empty((0,3), dtype='float32')
+  ret_arr = np.empty((0,3), dtype=DEFAULT_DTYPE)
   (number, _) = cieXYZ.shape
 
   for i in range(number):
@@ -112,6 +115,7 @@ def viewer():
   print('speed(edjp): ', datetime.datetime.now())
 
   plt.show()
+  #plt.savefig("sample.png",format = 'png', dpi=600)
 
 
 viewer()
