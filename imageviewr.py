@@ -4,10 +4,8 @@
 # 必要なライブラリのimport
 from PIL import Image
 import numpy as np
-#from matplotlib import pylab as plt
 from matplotlib import pyplot as plt
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
-#import csv
 import datetime
 
 DEFAULT_DTYPE = np.float32
@@ -23,13 +21,26 @@ def normalizeRgb(originPixel):
   #   正規化値  <= 0.04045 : 正規化値 / 12.92
   #   正規化値  >  0.04045 : ((正規化値 + 0.055) / 1.055) に 2.4階乗
   LINEAR_THR = 0.04045
-  ret_arr =  np.piecewise(tempPixel, [tempPixel <= LINEAR_THR, tempPixel > LINEAR_THR], [lambda tempPixel: tempPixel/12.92, lambda tempPixel: ((tempPixel+0.055)/1.055)**2.4])
+  ret_arr =  np.piecewise(
+    tempPixel,
+    [
+      tempPixel <= LINEAR_THR,
+      tempPixel > LINEAR_THR
+    ],
+    [
+      lambda tempPixel: tempPixel/12.92,
+      lambda tempPixel: ((tempPixel+0.055)/1.055)**2.4
+    ])
   return ret_arr.astype(DEFAULT_DTYPE)
+
 
 # convert from normalized RGB to CIE XYZ
 def convertToCieXYZ(normalizedRgb):
   # RGB of sRGB color space to CIE XYZ convert matrix
-  MATRIX = np.array([[0.412424, 0.357579, 0.180464],[0.212656, 0.715158, 0.072186],[0.019332, 0.119193, 0.950444]], dtype='float32')
+  MATRIX = np.array([
+    [0.412424, 0.357579, 0.180464],
+    [0.212656, 0.715158, 0.072186],
+    [0.019332, 0.119193, 0.950444]], dtype=DEFAULT_DTYPE)
 
   # 画像を１次元に並べ、ループで画素毎にRGBからXYZを算出
   ret_arr = np.empty((0,3), dtype=DEFAULT_DTYPE)
@@ -51,10 +62,14 @@ def convertToCiexyz(cieXYZ):
   (number, _) = cieXYZ.shape
 
   for i in range(number):
-    xyz = np.array([cieXYZ[i][0]/np.sum(cieXYZ[i]), cieXYZ[i][1]/np.sum(cieXYZ[i]), cieXYZ[i][2]/np.sum(cieXYZ[i])])
+    xyz = np.array([
+      cieXYZ[i][0]/np.sum(cieXYZ[i]),
+      cieXYZ[i][1]/np.sum(cieXYZ[i]),
+      cieXYZ[i][2]/np.sum(cieXYZ[i])])
     ret_arr = np.append(ret_arr, xyz.reshape(1,3), axis=0)
 
   return ret_arr
+
 
 def viewer():
   # 画像読み込み：仮実装のため、固定ファイル読み込み
@@ -94,12 +109,17 @@ def viewer():
 
   # CIE xy のプロット
   # RGBWのCIE xy座標
-  POLARS = np.array([[0.64, 0.33], [0.30, 0.60], [0.15, 0.06], [0.3127, 0.3290]])
+  POLARS = np.array([
+      [0.64, 0.33], [0.30, 0.60],
+      [0.15, 0.06], [0.3127, 0.3290]
+    ])
   ax_plot = fig.add_subplot(122)
-  ax_plot.plot(POLARS[0:,0], POLARS[0:,1], "r+", label="R/G/B polar and white point in sRGB color space")
+  ax_plot.plot(
+    POLARS[0:,0], POLARS[0:,1], "r+",
+    label="R/G/B polar and white point in sRGB color space")
   ax_plot.plot(x, y, 'k.', alpha=0.3, label="color in image")
 
-  # 描画の補助情報(描画範囲、メジャーなメモリ(0.1単位)とグリッド線、マイナーなメモリ(メジャーの５分割))
+  # 描画の補助情報(描画範囲、メジャーとマイナーのメモリとグリッド線)
   ax_plot.set_xlim(0, 1.0)
   ax_plot.set_ylim(0, 1.0)
   ax_plot.xaxis.set_major_locator(MultipleLocator(0.1))
@@ -107,8 +127,6 @@ def viewer():
   ax_plot.grid(linestyle="--", zorder=-10)
   ax_plot.xaxis.set_minor_locator(AutoMinorLocator(5))
   ax_plot.yaxis.set_minor_locator(AutoMinorLocator(5))
-  #ax_plot.tick_params(axis='both', which='major', width=1.0, length=10)
-  #ax_plot.tick_params(axis='both', which='minor', width=1.0, length=5, color='0.25')
   ax_plot.legend()
   ax_plot.set_aspect('equal')
   ax_plot.set_title("CIE xy")
