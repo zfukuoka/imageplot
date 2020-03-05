@@ -19,3 +19,14 @@ This program plots color on CIE xy color space using sample.jpg which located on
 ## 参考文献 reference
 
 - [色彩工学入門-定量的な色の理解と活用](https://www.amazon.co.jp/%E8%89%B2%E5%BD%A9%E5%B7%A5%E5%AD%A6%E5%85%A5%E9%96%80-%E5%AE%9A%E9%87%8F%E7%9A%84%E3%81%AA%E8%89%B2%E3%81%AE%E7%90%86%E8%A7%A3%E3%81%A8%E6%B4%BB%E7%94%A8-%E7%AF%A0%E7%94%B0-%E5%8D%9A%E4%B9%8B/dp/4627846819/ref=sr_1_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&keywords=%E8%89%B2%E5%BD%A9%E5%B7%A5%E5%AD%A6&qid=1582021897&sr=8-1)
+
+## ベンチマーク benchmark
+
+下表はある時点のソースを用いて、Raspberry Pi 2 で実行にかかった時間（時間計測を行っている出力の期間）を記す。
+なお、Out of order に対応した 今時のそこそこのCPU環境( Core i7、 Rapberry Pi 4、Jetson nanoなど)ではコード完成初期バージョンですら、2～3秒程度で終わってしまうので、割愛。
+
+| date of codes | elapsed time | memo |
+| :---: | ---: | :--- |
+| 2020/03/05 | 7.3 sec | ある個所の配列での繰り返し計算をコードによるループから numpy で完結するよう変更 |
+| 2020/02/22 | 9.5 sec | 粒度の高いデフォルトのfloat64から明示的にfloat32に変更
+| 2019/09/27 | 13.9 Sec | コード完成初期バージョン |

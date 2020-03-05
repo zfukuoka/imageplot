@@ -42,15 +42,13 @@ def convertToCieXYZ(normalizedRgb):
     [0.212656, 0.715158, 0.072186],
     [0.019332, 0.119193, 0.950444]], dtype=DEFAULT_DTYPE)
 
-  # 画像を１次元に並べ、ループで画素毎にRGBからXYZを算出
-  ret_arr = np.empty((0,3), dtype=DEFAULT_DTYPE)
-  temp = normalizedRgb.reshape(-1, 3)
-  (number, _) = temp.shape
+  # 1次元行列の配列のまま2次元行列を掛けるため、
+  # 掛け算の順序逆転と2次元配列を転置してRGBからXYZを算出
+  ret_arr = np.dot(normalizedRgb, MATRIX.T)
 
-  for i in range(number):
-    ret_arr = np.append(ret_arr, np.dot(MATRIX, temp[i]).reshape(1,3), axis=0)
+  # 前の実装を維持するため、2次元配列を1次元配列
+  return ret_arr.reshape(-1, 3)
 
-  return ret_arr
 
 # convert from CIE XYZ to CIE xyz 
 def convertToCiexyz(cieXYZ):
