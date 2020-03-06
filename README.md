@@ -27,6 +27,7 @@ This program plots color on CIE xy color space using sample.jpg which located on
 
 | date of codes | elapsed time | memo |
 | :---: | ---: | :--- |
+| 2020/03/06 | 0.6 sec | もう1か所あった配列での繰り返し計算をコードによるループから numpy で完結するよう変更 |
 | 2020/03/05 | 7.3 sec | ある個所の配列での繰り返し計算をコードによるループから numpy で完結するよう変更 |
 | 2020/02/22 | 9.5 sec | 粒度の高いデフォルトのfloat64から明示的にfloat32に変更
 | 2019/09/27 | 13.9 Sec | コード完成初期バージョン |

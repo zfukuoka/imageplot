@@ -52,21 +52,11 @@ def convertToCieXYZ(normalizedRgb):
 
 # convert from CIE XYZ to CIE xyz 
 def convertToCiexyz(cieXYZ):
-  # ループで画素毎にXYZからxyzを算出
+  # 画素毎にXYZからxyzを算出
   #   x = X / (X + Y + Z)
   #   y = Y / (X + Y + Z)
   #   z = Z / (X + Y + Z)
-  ret_arr = np.empty((0,3), dtype=DEFAULT_DTYPE)
-  (number, _) = cieXYZ.shape
-
-  for i in range(number):
-    xyz = np.array([
-      cieXYZ[i][0]/np.sum(cieXYZ[i]),
-      cieXYZ[i][1]/np.sum(cieXYZ[i]),
-      cieXYZ[i][2]/np.sum(cieXYZ[i])])
-    ret_arr = np.append(ret_arr, xyz.reshape(1,3), axis=0)
-
-  return ret_arr
+  return cieXYZ / np.tile(np.sum(cieXYZ, axis=1), (3,1)).T
 
 
 def viewer():
