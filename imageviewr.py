@@ -50,6 +50,22 @@ def convertToCieXYZ(normalizedRgb):
   return ret_arr.reshape(-1, 3)
 
 
+# convert from normalized RGB to YCbCr
+def convertToYCbCr(normalizedRgb):
+  # RGB of sRGB color space to YCbCr(ITU-R BT.601) convert matrix
+  MATRIX = np.array([
+    [ 0.299000,  0.587000,  0.114000],
+    [-0.168736, -0.331264,  0.500000],
+    [ 0.500000, -0.418688, -0.081312]], dtype=DEFAULT_DTYPE)
+
+  # 1次元行列の配列のまま2次元行列を掛けるため、
+  # 掛け算の順序逆転と2次元配列を転置してRGBからYCbCrを算出
+  ret_arr = np.dot(normalizedRgb, MATRIX.T)
+
+  # 前の実装を維持するため、2次元配列を1次元配列
+  return ret_arr.reshape(-1, 3)
+
+
 # convert from CIE XYZ to CIE xyz 
 def convertToCiexyz(cieXYZ):
   # 画素毎にXYZからxyzを算出
@@ -81,17 +97,18 @@ def viewer():
   normalizedRGB = normalizeRgb(im_list2)
   cieXYZ = convertToCieXYZ(normalizedRGB)
   ciexyz = convertToCiexyz(cieXYZ)
+  ycbcr = convertToYCbCr(normalizedRGB)
   
   # pick up x and y for ploting
   x = ciexyz[0:, 0]
   y = ciexyz[0:, 1]
 
   # 画像とグラフの同時表示
-  fig = plt.figure(figsize=(16,8))
+  fig = plt.figure(figsize=(16,16))
   fig.subplots_adjust(wspace=0.2)
 
   # 画像表示
-  ax_img = fig.add_subplot(121)
+  ax_img = fig.add_subplot(221)
   ax_img.imshow(im_list2)
   ax_img.set_title("Image")
 
@@ -101,7 +118,7 @@ def viewer():
       [0.64, 0.33], [0.30, 0.60],
       [0.15, 0.06], [0.3127, 0.3290]
     ])
-  ax_plot = fig.add_subplot(122)
+  ax_plot = fig.add_subplot(222)
   ax_plot.plot(
     POLARS[0:,0], POLARS[0:,1], "r+",
     label="R/G/B polar and white point in sRGB color space")
@@ -118,10 +135,38 @@ def viewer():
   ax_plot.legend()
   ax_plot.set_aspect('equal')
   ax_plot.set_title("CIE xy")
+
+  # RGBWCyanMagentaYellowのCbCr座標とプロット色
+  POLARS_CBCR = [
+    (-0.168736, 0.5, '#FF0000'), (-0.331264, -0.418688, '#00FF00'),
+    (0.5, -0.081312, '#0000FF'), (0.0, 0.0, '#000000'),
+    (0.168736, -0.5, '#00FFFF'), (0.331264, 0.418688, '#FF00FF'),
+    (-0.5, 0.081312, '#C0C000')
+  ]
+  
+  ax_plot2 = fig.add_subplot(223)
+  for (cb, cr, plot_color) in POLARS_CBCR:
+    ax_plot2.plot(
+      cb, cr, marker="+", color=plot_color, alpha=1.0
+    )
+  ax_plot2.plot(
+    ycbcr[0:, 1], ycbcr[0:, 2], 'k.', alpha=0.3,
+    label="color in image")
+  ax_plot2.set_xlim(-0.52, 0.52)
+  ax_plot2.set_ylim(-0.52, 0.52)
+  ax_plot2.xaxis.set_major_locator(MultipleLocator(0.1))
+  ax_plot2.yaxis.set_major_locator(MultipleLocator(0.1))
+  ax_plot2.grid(linestyle="--", zorder=-10)
+  ax_plot2.xaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot2.yaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot2.legend()
+  ax_plot2.set_aspect('equal')
+  ax_plot2.set_title("CbCr")
+
   print('speed(edjp): ', datetime.datetime.now())
 
   plt.show()
-  #plt.savefig("sample.png",format = 'png', dpi=600)
+  #plt.savefig("sample.png",format = 'png', dpi=120)
 
 
 viewer()
@@ -130,13 +175,14 @@ viewer()
 #test_np = np.arange(27).reshape(3,3,3)
 #test_np = np.linspace(228, 255, 27).reshape(3,3,3)
 # sRGB Red Green Blue White point
-#test_np = np.array(
-#    [ [[255, 0, 0], [0, 255, 0]],
-#      [[0, 0, 255], [255, 255, 255]] ])
+#test_np = np.array([
+#    [[255, 0, 0], [0, 255, 0]],
+#    [[0, 0, 255], [255, 255, 255]] ])
 #
 #test_np2 = normalizeRgb(test_np)
 #test_np3 = convertToCieXYZ(test_np2)
 #test_np4 = convertToCiexyz(test_np3)
+#test_np5 = convertToYCbCr(test_np2)
 #
 #print("test_np2")
 #print(test_np2)
@@ -144,3 +190,5 @@ viewer()
 #print(test_np3)
 #print("test_np4")
 #print(test_np4)
+#print("test_np5")
+#print(test_np5)

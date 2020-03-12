@@ -1,8 +1,9 @@
 # imageplot
 
 ## 概要 overview
-ローカルに置いてある samplel.jpg を読み込み、読み込んだ画像の色をCIE xyz空間にプロットします。
-This program plots color on CIE xy color space using sample.jpg which located on local file system.
+ローカルに置いてある samplel.jpg を読み込み、読み込んだ画像の色をCIE xyz空間とITU-R BT.601 CbCr空間にプロットします。
+
+This program plots color on CIE xy and ITU-R BT.601 CbCr color space using sample.jpg which located on local file system.
 
 ## Requirements
 - Python 3.5 or above
@@ -19,6 +20,8 @@ This program plots color on CIE xy color space using sample.jpg which located on
 ## 参考文献 reference
 
 - [色彩工学入門-定量的な色の理解と活用](https://www.amazon.co.jp/%E8%89%B2%E5%BD%A9%E5%B7%A5%E5%AD%A6%E5%85%A5%E9%96%80-%E5%AE%9A%E9%87%8F%E7%9A%84%E3%81%AA%E8%89%B2%E3%81%AE%E7%90%86%E8%A7%A3%E3%81%A8%E6%B4%BB%E7%94%A8-%E7%AF%A0%E7%94%B0-%E5%8D%9A%E4%B9%8B/dp/4627846819/ref=sr_1_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&keywords=%E8%89%B2%E5%BD%A9%E5%B7%A5%E5%AD%A6&qid=1582021897&sr=8-1)
+
+- [YUV - Wikipedia](https://ja.wikipedia.org/wiki/YUV)
 
 ## ベンチマーク benchmark
 
