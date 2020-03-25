@@ -75,6 +75,67 @@ def convertToCiexyz(cieXYZ):
   return cieXYZ / np.tile(np.sum(cieXYZ, axis=1), (3,1)).T
 
 
+# convert from CIE XYZ to CIE L*a*b*
+def convertToCielab(cieXYZ):
+  # 画素ごとにXYZからL*a*b*を算出
+  #   L* = 116 * f(Y/Yn) -16
+  #   a* = 500 * (f(X/Xn) - f(Y/Yn))
+  #   b* = 200 * (f(Y/Yn) - f(Z/Zn))
+  #
+  #   f(t) = t ^ (1/3) ... t > (6/29)^3
+  #   f(t) = (1/3) * (29/6)^2 * t + (4/29) ... t <= (6/29)^3
+
+  # 現時点で4段階の計算に分ける予定
+  #   1. CIE XYZ => X/Xn, Y/Yn, Z/Zn
+  #   2. X/Xn, Y/Yn, Z/Zn => f(X/Xn), f(Y/Yn), f(Z/Zn)
+  #   3. f(X/Xn), f(Y/Yn), f(Z/Zn) => L* + 16, a*, b*
+  #   4. L* + 16, a*, b* => L*, a*, b*
+
+  # 一応あるサイトでの計算結果
+  # 255, 255, 255 =>
+  #   100, 0.00526049995830391, -0.010408184525267927
+  # 255, 0, 0 =>
+  #   53.232881, 80.10930952982204, 67.22006831026425
+  # 0, 255, 0 =>
+  #   87.73703347354422, -86.18463649762525, 83.18116474777854
+  # 0, 0, 255 =>
+  #   83.18116474777854, 79.19666178930935, -107.86368104495168
+  REFERENCEPOINT_D50 = np.array([
+    [96.4212,  100.0,  82.5188],], dtype=DEFAULT_DTYPE)
+  REFERENCEPOINT_D65 = np.array([
+    [95.0489,  100.0,  108.8840],], dtype=DEFAULT_DTYPE)
+  CONVERT_MATRIX = np.array([
+    [0.0, 116.0, 0.0],
+    [500.0, -500.0, 0.0],
+    [0.0, 200.0, -200.0]], dtype=DEFAULT_DTYPE)
+  L_OFFSET = np.array([
+    [-16.0, 0.0, 0.0],], dtype=DEFAULT_DTYPE)
+  
+  # tempの正しい計算が不明のため、入力をそのまま使い現時点ではD65のL*a*b*とする
+  temp = cieXYZ
+  THR = 0.008856451679035631 # (6/29)^3
+  temp2 =  np.piecewise(
+    temp,
+    [
+      temp <= THR,
+      temp > THR
+    ],
+    [
+      lambda temp: 7.787037037037035 * temp + 0.13793103448275862,
+      lambda temp: temp ** 0.3333333333333333
+    ])
+  ret_arr = np.dot(temp2, CONVERT_MATRIX.T) + L_OFFSET
+  # print("CIE XYZ")
+  # print(cieXYZ)
+  # print("CIE XYZ bf convert")
+  # print(temp)
+  # print("before coefficient")
+  # print(temp2)
+  # print("result")
+  # print(ret_arr)
+  return ret_arr
+
+
 def viewer():
   # 画像読み込み：仮実装のため、固定ファイル読み込み
   print('speed(opjp): ', datetime.datetime.now())
@@ -175,20 +236,23 @@ viewer()
 #test_np = np.arange(27).reshape(3,3,3)
 #test_np = np.linspace(228, 255, 27).reshape(3,3,3)
 # sRGB Red Green Blue White point
-#test_np = np.array([
-#    [[255, 0, 0], [0, 255, 0]],
-#    [[0, 0, 255], [255, 255, 255]] ])
+# test_np = np.array([
+#     [[255, 0, 0], [0, 255, 0]],
+#     [[0, 0, 255], [255, 255, 255]] ])
+
+# test_np2 = normalizeRgb(test_np)
+# test_np3 = convertToCieXYZ(test_np2)
+# test_np4 = convertToCiexyz(test_np3)
+# test_np5 = convertToYCbCr(test_np2)
+# test_np6 = convertToCielab(test_np3)
 #
-#test_np2 = normalizeRgb(test_np)
-#test_np3 = convertToCieXYZ(test_np2)
-#test_np4 = convertToCiexyz(test_np3)
-#test_np5 = convertToYCbCr(test_np2)
-#
-#print("test_np2")
-#print(test_np2)
-#print("test_np3")
-#print(test_np3)
-#print("test_np4")
-#print(test_np4)
-#print("test_np5")
-#print(test_np5)
+# print("test_np2")
+# print(test_np2)
+# print("test_np3")
+# print(test_np3)
+# print("test_np4")
+# print(test_np4)
+# print("test_np5")
+# print(test_np5)
+# print("test_np6")
+# print(test_np6)
