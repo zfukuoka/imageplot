@@ -5,6 +5,7 @@
 from PIL import Image
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib import patches as patches
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 import datetime
 
@@ -91,19 +92,11 @@ def convertToCielab(cieXYZ):
   #   3. f(X/Xn), f(Y/Yn), f(Z/Zn) => L* + 16, a*, b*
   #   4. L* + 16, a*, b* => L*, a*, b*
 
-  # 一応あるサイトでの計算結果
-  # 255, 255, 255 =>
-  #   100, 0.00526049995830391, -0.010408184525267927
-  # 255, 0, 0 =>
-  #   53.232881, 80.10930952982204, 67.22006831026425
-  # 0, 255, 0 =>
-  #   87.73703347354422, -86.18463649762525, 83.18116474777854
-  # 0, 0, 255 =>
-  #   83.18116474777854, 79.19666178930935, -107.86368104495168
+  # 基準点の白点と変換式の行列
   REFERENCEPOINT_D50 = np.array([
-    [96.4212,  100.0,  82.5188],], dtype=DEFAULT_DTYPE)
+    [0.964212,  1.0,  0.825188],], dtype=DEFAULT_DTYPE)
   REFERENCEPOINT_D65 = np.array([
-    [95.0489,  100.0,  108.8840],], dtype=DEFAULT_DTYPE)
+    [0.950489,  1.0,  1.088840],], dtype=DEFAULT_DTYPE)
   CONVERT_MATRIX = np.array([
     [0.0, 116.0, 0.0],
     [500.0, -500.0, 0.0],
@@ -111,29 +104,22 @@ def convertToCielab(cieXYZ):
   L_OFFSET = np.array([
     [-16.0, 0.0, 0.0],], dtype=DEFAULT_DTYPE)
   
-  # tempの正しい計算が不明のため、入力をそのまま使い現時点ではD65のL*a*b*とする
-  temp = cieXYZ
+  # 基準のWhitePointの補正
+  correctedWPXYZ = cieXYZ / REFERENCEPOINT_D50
   THR = 0.008856451679035631 # (6/29)^3
-  temp2 =  np.piecewise(
-    temp,
+  preConverted =  np.piecewise(
+    correctedWPXYZ,
     [
-      temp <= THR,
-      temp > THR
+      correctedWPXYZ <= THR,
+      correctedWPXYZ > THR
     ],
     [
-      lambda temp: 7.787037037037035 * temp + 0.13793103448275862,
-      lambda temp: temp ** 0.3333333333333333
+      lambda correctedWPXYZ:
+        7.787037037037035 * correctedWPXYZ + 0.13793103448275862,
+      lambda correctedWPXYZ:
+        correctedWPXYZ ** 0.3333333333333333
     ])
-  ret_arr = np.dot(temp2, CONVERT_MATRIX.T) + L_OFFSET
-  # print("CIE XYZ")
-  # print(cieXYZ)
-  # print("CIE XYZ bf convert")
-  # print(temp)
-  # print("before coefficient")
-  # print(temp2)
-  # print("result")
-  # print(ret_arr)
-  return ret_arr
+  return np.dot(preConverted, CONVERT_MATRIX.T) + L_OFFSET
 
 
 def viewer():
@@ -159,6 +145,7 @@ def viewer():
   cieXYZ = convertToCieXYZ(normalizedRGB)
   ciexyz = convertToCiexyz(cieXYZ)
   ycbcr = convertToYCbCr(normalizedRGB)
+  cieLab = convertToCielab(cieXYZ)
   
   # pick up x and y for ploting
   x = ciexyz[0:, 0]
@@ -224,10 +211,41 @@ def viewer():
   ax_plot2.set_aspect('equal')
   ax_plot2.set_title("CbCr")
 
+  # RGBCyanMagentaYellowのCIE L*a*b*座標とプロット色
+  POLARS_LAB = [
+    (78.28357, 62.150043, '#FF0000'), (-87.905914, 73.916306, '#00FF00'),
+    (77.819214, -126.371704, '#0000FF'), (-50.057648, -33.38832, '#00FFFF'),
+    (96.19589, -79.46594, '#FF00FF'), (-23.782745, 84.73825, '#C0C000')]
+  ax_plot3 = fig.add_subplot(224)
+  for(a_ast, b_ast, plot_color) in POLARS_LAB:
+    ax_plot3.plot(
+      a_ast, b_ast, marker="+", color=plot_color, alpha=1.0
+    )
+  ax_plot3.plot(
+    cieLab[0:, 1], cieLab[0:, 2], 'k.', alpha=0.3,
+    label="color in image")
+  ax_plot3.set_xlim(-128, 128)
+  ax_plot3.set_ylim(-128, 128)
+  ax_plot3.xaxis.set_major_locator(MultipleLocator(25.0))
+  ax_plot3.yaxis.set_major_locator(MultipleLocator(25.0))
+  ax_plot3.axvline(c='gray', linewidth=1.0)
+  ax_plot3.axhline(c='gray', linewidth=1.0)
+  for i in range(9):
+    grid_circle = patches.Circle(
+      xy=(0, 0), radius=(i*25.0), fill=False,
+      edgecolor='gray', linestyle="--", zorder=-10)
+    ax_plot3.add_patch(grid_circle)
+  ax_plot3.xaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot3.yaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot3.legend()
+  ax_plot3.set_aspect('equal')
+  ax_plot3.set_title("CIE L*a*b*(D50)")
+
+
   print('speed(edjp): ', datetime.datetime.now())
 
   plt.show()
-  #plt.savefig("sample.png",format = 'png', dpi=120)
+  # plt.savefig("sample.png",format = 'png', dpi=120)
 
 
 viewer()
@@ -239,7 +257,10 @@ viewer()
 # test_np = np.array([
 #     [[255, 0, 0], [0, 255, 0]],
 #     [[0, 0, 255], [255, 255, 255]] ])
-
+# test_np = np.array([
+#   [[255, 0, 0], [0, 255, 0], [0, 0, 255]],
+#   [[0,255, 255], [255, 0, 255], [255, 255, 0]]
+# ])
 # test_np2 = normalizeRgb(test_np)
 # test_np3 = convertToCieXYZ(test_np2)
 # test_np4 = convertToCiexyz(test_np3)
