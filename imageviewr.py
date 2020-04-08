@@ -124,8 +124,10 @@ def convertToCielab(cieXYZ):
 
 def convertToCieLch(cieLab):
   # (c, h) = convertToCieLch(cieLab)
-  c = np.sqrt(np.power(cieLab[0:,1], 2) + np.power(cieLab[0:,2], 2))
-  h = np.arctan(cieLab[0:,2]/cieLab[0:,1])
+  c = np.sqrt(
+    np.power(cieLab[0:,1], 2) + np.power(cieLab[0:,2], 2),
+    dtype=DEFAULT_DTYPE)
+  h = np.arctan2(cieLab[0:,2], cieLab[0:,1], dtype=DEFAULT_DTYPE)
   return (c, h)
 
 
@@ -249,18 +251,35 @@ def viewer():
   ax_plot3.set_aspect('equal')
   ax_plot3.set_title("CIE L*a*b*(D50)")
 
-  ax_plot4 = fig.add_subplot(325)
+  # RGBCyanMagentaYellowのCIE LCH座標とプロット色
+  POLARS_LCH = [
+    (99.95472, 0.671016, '#FF0000'), (114.85239, 2.4424305, '#00FF00'),
+    (148.41037, -1.0188428, '#0000FF'), (60.17099, -2.5533612, '#00FFFF'),
+    (124.773735, -0.690445, '#FF00FF'), (88.01244, 1.8444182, '#C0C000')]
+  ax_plot4 = fig.add_subplot(313)
+  for(c_ast, h_ast, plot_color) in POLARS_LCH:
+    ax_plot4.plot(
+      h_ast, c_ast, marker="+", color=plot_color, alpha=1.0
+    )
   ax_plot4.plot(
     h, c, 'k.', alpha=0.3,
     label="color in image")
+  ax_plot4.set_xlim(-1.0 * np.pi, 1.0 * np.pi)
+  ax_plot4.set_ylim(0, 175)
+  ax_plot4.xaxis.set_major_locator(MultipleLocator(np.pi/6))
+  ax_plot4.yaxis.set_major_locator(MultipleLocator(25.0))
+  ax_plot4.grid(linestyle="--", zorder=-10)
+  ax_plot4.xaxis.set_minor_locator(AutoMinorLocator(3))
+  ax_plot4.yaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot4.legend()
+  ax_plot4.set_title("CIE LCH(D50)")
 
 
   print('speed(edjp): ', datetime.datetime.now())
 
-  # plt.show()
-  plt.savefig("sample.png",format = 'png', dpi=120)
+  plt.show()
+  # plt.savefig("sample.png",format = 'png', dpi=120)
 
-  print(cieLab[0], c[0], h[0])
 
 viewer()
 
@@ -280,6 +299,7 @@ viewer()
 # test_np4 = convertToCiexyz(test_np3)
 # test_np5 = convertToYCbCr(test_np2)
 # test_np6 = convertToCielab(test_np3)
+# (test_np7c, test_np7h) = convertToCieLch(test_np6)
 #
 # print("test_np2")
 # print(test_np2)
@@ -291,3 +311,6 @@ viewer()
 # print(test_np5)
 # print("test_np6")
 # print(test_np6)
+# print("test_np7")
+# print(test_np7c)
+# print(test_np7h)
