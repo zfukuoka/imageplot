@@ -192,6 +192,8 @@ def viewer():
   ax_plot.yaxis.set_minor_locator(AutoMinorLocator(5))
   ax_plot.legend()
   ax_plot.set_aspect('equal')
+  ax_plot.set_xlabel("x")
+  ax_plot.set_ylabel("y")
   ax_plot.set_title("CIE xy")
 
   # RGBWCyanMagentaYellowのCbCr座標とプロット色
@@ -215,10 +217,14 @@ def viewer():
   ax_plot2.xaxis.set_major_locator(MultipleLocator(0.1))
   ax_plot2.yaxis.set_major_locator(MultipleLocator(0.1))
   ax_plot2.grid(linestyle="--", zorder=-10)
+  ax_plot2.axvline(c='gray', linewidth=1.0)
+  ax_plot2.axhline(c='gray', linewidth=1.0)
   ax_plot2.xaxis.set_minor_locator(AutoMinorLocator(5))
   ax_plot2.yaxis.set_minor_locator(AutoMinorLocator(5))
   ax_plot2.legend()
   ax_plot2.set_aspect('equal')
+  ax_plot2.set_xlabel("Cb")
+  ax_plot2.set_ylabel("Cr")
   ax_plot2.set_title("CbCr")
 
   # RGBCyanMagentaYellowのCIE L*a*b*座標とプロット色
@@ -249,9 +255,11 @@ def viewer():
   ax_plot3.yaxis.set_minor_locator(AutoMinorLocator(5))
   ax_plot3.legend()
   ax_plot3.set_aspect('equal')
+  ax_plot3.set_xlabel("a*")
+  ax_plot3.set_ylabel("b*")
   ax_plot3.set_title("CIE L*a*b*(D50)")
 
-  # RGBCyanMagentaYellowのCIE LCH座標とプロット色
+  # RGBCyanMagentaYellowのCIE L*C*H座標とプロット色
   POLARS_LCH = [
     (99.95472, 0.671016, '#FF0000'), (114.85239, 2.4424305, '#00FF00'),
     (148.41037, -1.0188428, '#0000FF'), (60.17099, -2.5533612, '#00FFFF'),
@@ -272,7 +280,9 @@ def viewer():
   ax_plot4.xaxis.set_minor_locator(AutoMinorLocator(3))
   ax_plot4.yaxis.set_minor_locator(AutoMinorLocator(5))
   ax_plot4.legend()
-  ax_plot4.set_title("CIE LCH(D50)")
+  ax_plot4.set_xlabel("Hue(H) [radian]")
+  ax_plot4.set_ylabel("Chroma(C*)")
+  ax_plot4.set_title("CIE L*C*H(D50)")
 
 
   print('speed(edjp): ', datetime.datetime.now())

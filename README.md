@@ -1,9 +1,9 @@
 # imageplot
 
 ## 概要 overview
-ローカルに置いてある samplel.jpg を読み込み、読み込んだ画像の色をCIE xyz空間、ITU-R BT.601 CbCr空間、CIE L\*a\*b\*(D50)にプロットします。
+ローカルに置いてある samplel.jpg を読み込み、読み込んだ画像の色をCIE xyz空間、ITU-R BT.601 CbCr空間、CIE L\*a\*b\*(D50)、CIE L\*C\*H(D50)にプロットします。
 
-This program plots color on CIE xy, ITU-R BT.601 CbCr and CIE L\*a\*b\*(D50) color space using sample.jpg which located on local file system.
+This program plots color on CIE xy, ITU-R BT.601 CbCr, CIE L\*a\*b\*(D50) and CIE L\*C\*H color space using sample.jpg which located on local file system.
 
 ## Requirements
 - Python 3.5 or above
@@ -34,6 +34,7 @@ This program plots color on CIE xy, ITU-R BT.601 CbCr and CIE L\*a\*b\*(D50) col
 
 | date of codes | elapsed time | memo |
 | :---: | ---: | :--- |
+| 2020/04/08 | 1.8 sec | L\*a\*b\* と LCHのプロット機能追加 |
 | 2020/03/12 | 1.0 sec | CbCrのプロット機能追加 |
 | 2020/03/06 | 0.6 sec | もう1か所あった配列での繰り返し計算をコードによるループから numpy で完結するよう変更 |
 | 2020/03/05 | 7.3 sec | ある個所の配列での繰り返し計算をコードによるループから numpy で完結するよう変更 |
