@@ -122,6 +122,13 @@ def convertToCielab(cieXYZ):
   return np.dot(preConverted, CONVERT_MATRIX.T) + L_OFFSET
 
 
+def convertToCieLch(cieLab):
+  # (c, h) = convertToCieLch(cieLab)
+  c = np.sqrt(np.power(cieLab[0:,1], 2) + np.power(cieLab[0:,2], 2))
+  h = np.arctan(cieLab[0:,2]/cieLab[0:,1])
+  return (c, h)
+
+
 def viewer():
   # 画像読み込み：仮実装のため、固定ファイル読み込み
   print('speed(opjp): ', datetime.datetime.now())
@@ -146,6 +153,7 @@ def viewer():
   ciexyz = convertToCiexyz(cieXYZ)
   ycbcr = convertToYCbCr(normalizedRGB)
   cieLab = convertToCielab(cieXYZ)
+  (c, h) = convertToCieLch(cieLab)
   
   # pick up x and y for ploting
   x = ciexyz[0:, 0]
@@ -156,7 +164,7 @@ def viewer():
   fig.subplots_adjust(wspace=0.2)
 
   # 画像表示
-  ax_img = fig.add_subplot(221)
+  ax_img = fig.add_subplot(321)
   ax_img.imshow(im_list2)
   ax_img.set_title("Image")
 
@@ -166,7 +174,7 @@ def viewer():
       [0.64, 0.33], [0.30, 0.60],
       [0.15, 0.06], [0.3127, 0.3290]
     ])
-  ax_plot = fig.add_subplot(222)
+  ax_plot = fig.add_subplot(322)
   ax_plot.plot(
     POLARS[0:,0], POLARS[0:,1], "r+",
     label="R/G/B polar and white point in sRGB color space")
@@ -192,7 +200,7 @@ def viewer():
     (-0.5, 0.081312, '#C0C000')
   ]
   
-  ax_plot2 = fig.add_subplot(223)
+  ax_plot2 = fig.add_subplot(323)
   for (cb, cr, plot_color) in POLARS_CBCR:
     ax_plot2.plot(
       cb, cr, marker="+", color=plot_color, alpha=1.0
@@ -216,7 +224,7 @@ def viewer():
     (78.28357, 62.150043, '#FF0000'), (-87.905914, 73.916306, '#00FF00'),
     (77.819214, -126.371704, '#0000FF'), (-50.057648, -33.38832, '#00FFFF'),
     (96.19589, -79.46594, '#FF00FF'), (-23.782745, 84.73825, '#C0C000')]
-  ax_plot3 = fig.add_subplot(224)
+  ax_plot3 = fig.add_subplot(324)
   for(a_ast, b_ast, plot_color) in POLARS_LAB:
     ax_plot3.plot(
       a_ast, b_ast, marker="+", color=plot_color, alpha=1.0
@@ -241,12 +249,18 @@ def viewer():
   ax_plot3.set_aspect('equal')
   ax_plot3.set_title("CIE L*a*b*(D50)")
 
+  ax_plot4 = fig.add_subplot(325)
+  ax_plot4.plot(
+    h, c, 'k.', alpha=0.3,
+    label="color in image")
+
 
   print('speed(edjp): ', datetime.datetime.now())
 
-  plt.show()
-  # plt.savefig("sample.png",format = 'png', dpi=120)
+  # plt.show()
+  plt.savefig("sample.png",format = 'png', dpi=120)
 
+  print(cieLab[0], c[0], h[0])
 
 viewer()
 
