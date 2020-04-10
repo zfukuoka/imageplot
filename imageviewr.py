@@ -149,7 +149,7 @@ def viewer():
   skip *= 4
   im_list2 = im_list[::skip,::skip,::]
 
-  # RGB to CIE xyz
+  # RGB to CIE xyz, YCbCr, CIE L*a*b* and CIE L*C*h
   normalizedRGB = normalizeRgb(im_list2)
   cieXYZ = convertToCieXYZ(normalizedRGB)
   ciexyz = convertToCiexyz(cieXYZ)
@@ -204,6 +204,7 @@ def viewer():
     (-0.5, 0.081312, '#C0C000')
   ]
   
+  # YCbCrのプロット
   ax_plot2 = fig.add_subplot(323)
   for (cb, cr, plot_color) in POLARS_CBCR:
     ax_plot2.plot(
@@ -232,6 +233,8 @@ def viewer():
     (78.28357, 62.150043, '#FF0000'), (-87.905914, 73.916306, '#00FF00'),
     (77.819214, -126.371704, '#0000FF'), (-50.057648, -33.38832, '#00FFFF'),
     (96.19589, -79.46594, '#FF00FF'), (-23.782745, 84.73825, '#C0C000')]
+
+  # CIE L*a*b* のプロット
   ax_plot3 = fig.add_subplot(324)
   for(a_ast, b_ast, plot_color) in POLARS_LAB:
     ax_plot3.plot(
@@ -264,6 +267,8 @@ def viewer():
     (99.95472, 0.671016, '#FF0000'), (114.85239, 2.4424305, '#00FF00'),
     (148.41037, -1.0188428, '#0000FF'), (60.17099, -2.5533612, '#00FFFF'),
     (124.773735, -0.690445, '#FF00FF'), (88.01244, 1.8444182, '#C0C000')]
+
+  # 角度を横軸、彩度を縦軸としたCIE L*C*hのプロット
   ax_plot4 = fig.add_subplot(313)
   for(c_ast, h_ast, plot_color) in POLARS_LCH:
     ax_plot4.plot(
