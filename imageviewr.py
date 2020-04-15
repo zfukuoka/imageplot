@@ -277,13 +277,44 @@ def viewer():
     [ 0.0, 6.132538, 16.143116, 24.99825, 31.476112, 36.546013,
       41.441784, 46.196682, 50.832, 55.363815, 59.80462, 64.16437,
       68.45123, 72.67195, 76.83223, 80.9369]]
+    
+  # RGBの原色から補色間のプロット
+  RED_TO_YELLOW_LAB = [
+    [ 75.09357, 67.53348, 55.71701, 40.90918, 24.55774, 7.8143005,
+      -8.587097, -23.782745],
+    [ 62.401733, 63.163517, 64.75249, 67.31845, 70.79765, 75.01154,
+      79.76728, 84.73825]]
+  RED_TO_MAGENTA_LAB = [
+    [ 78.58859, 79.35852, 80.705414, 82.67145, 85.2583, 88.43564,
+      92.14966, 96.19589],
+    [ 51.136993, 33.007538, 12.779709, -7.368164, -26.811333, -45.39196,
+      -63.100983, -79.46594]]
+  GREEN_TO_CYAN_LAB = [
+    [ -87.25238, -85.60391, -82.7247, -78.532135, -73.0347, -66.313965,
+      -58.504425, -50.057648],
+    [ 70.11995, 61.52334, 48.841476, 33.63788, 17.146057, 0.1320343,
+      -16.968353, -33.38832]]
+  GREEN_TO_YELLOW_LAB = [
+    [ -83.2211, -69.64282, -48.51953, -23.782745],
+    [ 74.53055, 76.45332, 79.90204, 84.73825]]
+  BLUE_TO_MAGENTA_LAB = [
+    [ 78.58574, 81.60315, 87.70828, 96.19589],
+    [ -122.44697, -111.830696, -96.58079, -79.46594]]
+  BLUE_TO_CYAN_LAB = [
+    [ 71.03102, 56.646378, 37.518463, 17.238464, -2.1560059, -19.919556,
+      -35.97162, -50.057648],
+    [ -122.70176, -114.60118, -103.03966, -89.59697, -75.37581, -61.001846,
+      -46.80681, -33.38832]]
 
-  # CIE L*a*b* のプロット
   ax_plot3 = fig.add_subplot(324)
+
+  # RGBCyanMagentaYellow の極値のプロット
   for(a_ast, b_ast, plot_color) in POLARS_LAB:
     ax_plot3.plot(
       a_ast, b_ast, marker="+", color=plot_color, alpha=1.0
     )
+  
+  # 補助線のプロット
   ax_plot3.plot(
     RED_LAB[0], RED_LAB[1], color='#FF0000',
     linestyle="--", alpha=1.0, zorder=-5.0)
@@ -302,6 +333,26 @@ def viewer():
   ax_plot3.plot(
     YELLOW_LAB[0], YELLOW_LAB[1], color='#C0C000',
     linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot3.plot(
+    RED_TO_YELLOW_LAB[0], RED_TO_YELLOW_LAB[1], color='#FFC000',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot3.plot(
+    RED_TO_MAGENTA_LAB[0], RED_TO_MAGENTA_LAB[1], color='#FF00C0',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot3.plot(
+    GREEN_TO_CYAN_LAB[0], GREEN_TO_CYAN_LAB[1], color='#00FFC0',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot3.plot(
+    GREEN_TO_YELLOW_LAB[0], GREEN_TO_YELLOW_LAB[1], color='#C0FF00',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot3.plot(
+    BLUE_TO_MAGENTA_LAB[0], BLUE_TO_MAGENTA_LAB[1], color='#C000FF',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot3.plot(
+    BLUE_TO_CYAN_LAB[0], BLUE_TO_CYAN_LAB[1], color='#00C0FF',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+
+  # CIE L*a*b* のプロット
   ax_plot3.plot(
     cieLab[0:, 1], cieLab[0:, 2], 'k.', alpha=0.3,
     label="color in image")
