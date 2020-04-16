@@ -128,7 +128,7 @@ def convertToCieLch(cieLab):
     np.power(cieLab[0:,1], 2) + np.power(cieLab[0:,2], 2),
     dtype=DEFAULT_DTYPE)
   h = np.arctan2(cieLab[0:,2], cieLab[0:,1], dtype=DEFAULT_DTYPE)
-  return (c, h)
+  return np.c_[cieLab[0:,0], c, h]
 
 
 def viewer():
@@ -155,7 +155,7 @@ def viewer():
   ciexyz = convertToCiexyz(cieXYZ)
   ycbcr = convertToYCbCr(normalizedRGB)
   cieLab = convertToCielab(cieXYZ)
-  (c, h) = convertToCieLch(cieLab)
+  cieLch = convertToCieLch(cieLab)
   
   # pick up x and y for ploting
   x = ciexyz[0:, 0]
@@ -388,7 +388,7 @@ def viewer():
       h_ast, c_ast, marker="+", color=plot_color, alpha=1.0
     )
   ax_plot4.plot(
-    h, c, 'k.', alpha=0.3,
+    cieLch[0:,2], cieLch[0:,1], 'k.', alpha=0.3,
     label="color in image")
   ax_plot4.set_xlim(-1.0 * np.pi, 1.0 * np.pi)
   ax_plot4.set_ylim(0, 175)
@@ -432,6 +432,7 @@ viewer()
 # test_np5 = convertToYCbCr(test_np2)
 # test_np6 = convertToCielab(test_np3)
 # (test_np7c, test_np7h) = convertToCieLch(test_np6)
+# test_np7 = convertToCieLch(test_np6)
 #
 # print("test_np2")
 # print(test_np2)
@@ -444,5 +445,4 @@ viewer()
 # print("test_np6")
 # print(test_np6)
 # print("test_np7")
-# print(test_np7c)
-# print(test_np7h)
+# print(test_np7)

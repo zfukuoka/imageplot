@@ -15,17 +15,25 @@ This program plots color on CIE xy, ITU-R BT.601 CbCr, CIE L\*a\*b\*(D50) and CI
 - 実装例を示すことと自身のプログラミングの習得を目的としているため、異常終了などの処理は全く行っていません
 - 対象となる画像はjpegのみとしており、色空間がsRGB、ガンマ2.2を前提とした実装になっています
   - 近年のiPhoneは、jpegに異なる色空間(Display P3)を用いているので、正しく動作しません
+- CrCb及び、L\*a\*b\*(D50)、L\*C\*h(D50)のプロットは動作検証できていないので、動作保証しません
 
 
 ## 参考文献 reference
 
 - [色彩工学入門-定量的な色の理解と活用](https://www.amazon.co.jp/%E8%89%B2%E5%BD%A9%E5%B7%A5%E5%AD%A6%E5%85%A5%E9%96%80-%E5%AE%9A%E9%87%8F%E7%9A%84%E3%81%AA%E8%89%B2%E3%81%AE%E7%90%86%E8%A7%A3%E3%81%A8%E6%B4%BB%E7%94%A8-%E7%AF%A0%E7%94%B0-%E5%8D%9A%E4%B9%8B/dp/4627846819/ref=sr_1_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&keywords=%E8%89%B2%E5%BD%A9%E5%B7%A5%E5%AD%A6&qid=1582021897&sr=8-1)
+  - 昔に購入した資料で、CIE xyへの変換公式で参考にしました
 
 - [YUV - Wikipedia](https://ja.wikipedia.org/wiki/YUV)
+  - YCrCbへの変換公式で参考にしました
 
 - [Lab色空間 - Wikipedia](https://ja.wikipedia.org/wiki/Lab%E8%89%B2%E7%A9%BA%E9%96%93)
+  - CIE L\*a\*b\* への変換公式で参考にしました
 
 - [L*a*b*色空間（CIE 1976）-楽しく学べる知恵袋 | コニカミノルタ](https://www.konicaminolta.jp/instruments/knowledge/color/section5/08.html)
+  - 過去にセミナーに参加したことがあり、色を計測する観点でとても強い企業です
+
+- [Data Analysis Cheat Sheet](https://booth.pm/ja/items/1313441)
+  - matplotlib を用いたプロットする際に日本語での大まかなつかみを得るときに参考にしました
 
 ## ベンチマーク benchmark
 
