@@ -162,11 +162,11 @@ def viewer():
   y = ciexyz[0:, 1]
 
   # 画像とグラフの同時表示
-  fig = plt.figure(figsize=(16,16))
+  fig = plt.figure(figsize=(16,32))
   fig.subplots_adjust(wspace=0.2)
 
   # 画像表示
-  ax_img = fig.add_subplot(321)
+  ax_img = fig.add_subplot(421)
   ax_img.imshow(im_list2)
   ax_img.set_title("Image")
 
@@ -176,7 +176,7 @@ def viewer():
       [0.64, 0.33], [0.30, 0.60],
       [0.15, 0.06], [0.3127, 0.3290]
     ])
-  ax_plot = fig.add_subplot(322)
+  ax_plot = fig.add_subplot(422)
   ax_plot.plot(
     POLARS[0:,0], POLARS[0:,1], "r+",
     label="R/G/B polar and white point in sRGB color space")
@@ -205,7 +205,7 @@ def viewer():
   ]
   
   # YCbCrのプロット
-  ax_plot2 = fig.add_subplot(323)
+  ax_plot2 = fig.add_subplot(423)
   for (cb, cr, plot_color) in POLARS_CBCR:
     ax_plot2.plot(
       cb, cr, marker="+", color=plot_color, alpha=1.0
@@ -306,7 +306,7 @@ def viewer():
     [ -122.70176, -114.60118, -103.03966, -89.59697, -75.37581, -61.001846,
       -46.80681, -33.38832]]
 
-  ax_plot3 = fig.add_subplot(324)
+  ax_plot3 = fig.add_subplot(424)
 
   # RGBCyanMagentaYellow の極値のプロット
   for(a_ast, b_ast, plot_color) in POLARS_LAB:
@@ -382,7 +382,7 @@ def viewer():
     (124.773735, -0.690445, '#FF00FF'), (88.01244, 1.8444182, '#C0C000')]
 
   # 角度を横軸、彩度を縦軸としたCIE L*C*hのプロット
-  ax_plot4 = fig.add_subplot(313)
+  ax_plot4 = fig.add_subplot(413)
   for(c_ast, h_ast, plot_color) in POLARS_LCH:
     ax_plot4.plot(
       h_ast, c_ast, marker="+", color=plot_color, alpha=1.0
