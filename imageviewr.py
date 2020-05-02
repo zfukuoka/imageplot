@@ -3,11 +3,12 @@
 
 # 必要なライブラリのimport
 from PIL import Image
-import numpy as np
+import datetime
 from matplotlib import pyplot as plt
 from matplotlib import patches as patches
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
-import datetime
+import numpy as np
+import sys
 
 DEFAULT_DTYPE = np.float32
 
@@ -131,10 +132,14 @@ def convertToCieLch(cieLab):
   return np.c_[cieLab[0:,0], c, h]
 
 
-def viewer():
-  # 画像読み込み：仮実装のため、固定ファイル読み込み
+def viewer(arg):
   print('speed(opjp): ', datetime.datetime.now())
-  im = Image.open("sample.jpg")
+  if(len(arg) > 1):
+    # 画像読み込み：引数が指定されていたら先頭のファイルを読み込み
+    im = Image.open(arg[1])
+  else:
+    # 画像読み込み：仮実装のため、固定ファイル読み込み
+    im = Image.open("sample.jpg")
   im_list = np.asarray(im)
 
   # 画像の間引き：とりあえず、XGA以上の解像度を想定し、横幅1024未満にする間引き
@@ -409,7 +414,7 @@ def viewer():
   # plt.savefig("sample.png",format = 'png', dpi=120)
 
 
-viewer()
+viewer(sys.argv)
 
 # テストデータで0～255のRGB256諧調を前提とする
 #test_np = np.arange(27).reshape(3,3,3)
