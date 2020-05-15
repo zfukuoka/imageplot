@@ -5,10 +5,11 @@
 
 This program plots color on CIE xy, ITU-R BT.601 CbCr, CIE L\*a\*b\*(D50) and CIE L\*C\*h color space using sample.jpg which located on local file system.
 
-## Requirements
+## 動作環境 Requirements
 - Python 3.5 or above
 - numpy
 - matplotlib
+- Pillow
 
 ## 制限事項 restictions
 - 全ピクセルを処理すると、時間がかかるため間引きしています
@@ -16,6 +17,7 @@ This program plots color on CIE xy, ITU-R BT.601 CbCr, CIE L\*a\*b\*(D50) and CI
 - 対象となる画像はjpegのみとしており、色空間がsRGB、ガンマ2.2を前提とした実装になっています
   - 近年のiPhoneは、jpegに異なる色空間(Display P3)を用いているので、正しく動作しません
 - CrCb及び、L\*a\*b\*(D50)、L\*C\*h(D50)のプロットは動作検証できていないので、動作保証しません
+- ここでは見える形で色の変換を実装するため、PillowやOpenCVなどで実装されている色の変換機能を利用せず、自前で色変換を行っております
 
 
 ## 参考文献 reference
