@@ -381,14 +381,14 @@ def viewer(arg):
   ax_plot3.set_title("CIE L*a*b*(D50)")
 
   # RGBCyanMagentaYellowのCIE L*C*h座標とプロット色
-  POLARS_LCH = [
+  POLARS_CH = [
     (99.95472, 0.671016, '#FF0000'), (114.85239, 2.4424305, '#00FF00'),
     (148.41037, -1.0188428, '#0000FF'), (60.17099, -2.5533612, '#00FFFF'),
     (124.773735, -0.690445, '#FF00FF'), (88.01244, 1.8444182, '#C0C000')]
 
   # 角度を横軸、彩度を縦軸としたCIE L*C*hのプロット
   ax_plot4 = fig.add_subplot(413)
-  for(c_ast, h_ast, plot_color) in POLARS_LCH:
+  for(c_ast, h_ast, plot_color) in POLARS_CH:
     ax_plot4.plot(
       h_ast, c_ast, marker="+", color=plot_color, alpha=1.0
     )
@@ -407,6 +407,31 @@ def viewer(arg):
   ax_plot4.set_ylabel("Chroma(C*)")
   ax_plot4.set_title("CIE L*C*h(D50)")
 
+  # RGBCyanMagentaYellowのCIE L*C*h座標とプロット色
+  POLARS_LH = [
+    (53.23896, 0.671016, '#FF0000'), (87.735, 2.4424305, '#00FF00'),
+    (32.29946, -1.0188428, '#0000FF'), (91.11398, -2.5533612, '#00FFFF'),
+    (60.323685, -0.690445, '#FF00FF'), (97.13882, 1.8444182, '#C0C000')]
+
+  ax_plot5 = fig.add_subplot(414)
+  for(l_ast, h_ast, plot_color) in POLARS_LH:
+    ax_plot5.plot(
+      h_ast, l_ast, marker="+", color=plot_color, alpha=1.0
+    )
+  ax_plot5.plot(
+    cieLch[0:,2], cieLch[0:,0], 'k.', alpha=0.3,
+    label="color in image")
+  ax_plot5.set_xlim(-1.0 * np.pi, 1.0 * np.pi)
+  ax_plot5.set_ylim(0,100)
+  ax_plot5.xaxis.set_major_locator(MultipleLocator(np.pi/6))
+  ax_plot5.yaxis.set_major_locator(MultipleLocator(10.0))
+  ax_plot5.grid(linestyle="--", zorder=-10)
+  ax_plot5.xaxis.set_minor_locator(AutoMinorLocator(3))
+  ax_plot5.yaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot5.legend()
+  ax_plot5.set_xlabel("Hue(h) [radian]")
+  ax_plot5.set_ylabel("Luminance(L)")
+  ax_plot5.set_title("CIE L*C*h(D50)")
 
   print('speed(edjp): ', datetime.datetime.now())
 
@@ -436,7 +461,6 @@ viewer(sys.argv)
 # test_np4 = convertToCiexyz(test_np3)
 # test_np5 = convertToYCbCr(test_np2)
 # test_np6 = convertToCielab(test_np3)
-# (test_np7c, test_np7h) = convertToCieLch(test_np6)
 # test_np7 = convertToCieLch(test_np6)
 #
 # print("test_np2")
