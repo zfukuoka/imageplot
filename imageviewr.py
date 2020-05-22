@@ -413,6 +413,7 @@ def viewer(arg):
     (32.29946, -1.0188428, '#0000FF'), (91.11398, -2.5533612, '#00FFFF'),
     (60.323685, -0.690445, '#FF00FF'), (97.13882, 1.8444182, '#C0C000')]
 
+  # 角度を横軸、輝度を縦軸としたCIE L*C*hのプロット
   ax_plot5 = fig.add_subplot(414)
   for(l_ast, h_ast, plot_color) in POLARS_LH:
     ax_plot5.plot(
