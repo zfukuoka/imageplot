@@ -4,6 +4,7 @@
 # 必要なライブラリのimport
 from PIL import Image
 import datetime
+from matplotlib import cm as cm
 from matplotlib import pyplot as plt
 from matplotlib import patches as patches
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
@@ -171,7 +172,7 @@ def viewer(arg):
   fig.subplots_adjust(wspace=0.2)
 
   # 画像表示
-  ax_img = fig.add_subplot(421)
+  ax_img = fig.add_subplot(521)
   ax_img.imshow(im_list2)
   ax_img.set_title("Image")
 
@@ -181,7 +182,7 @@ def viewer(arg):
       [0.64, 0.33], [0.30, 0.60],
       [0.15, 0.06], [0.3127, 0.3290]
     ])
-  ax_plot = fig.add_subplot(422)
+  ax_plot = fig.add_subplot(522)
   ax_plot.plot(
     POLARS[0:,0], POLARS[0:,1], "r+",
     label="R/G/B polar and white point in sRGB color space")
@@ -210,7 +211,7 @@ def viewer(arg):
   ]
   
   # YCbCrのプロット
-  ax_plot2 = fig.add_subplot(423)
+  ax_plot2 = fig.add_subplot(523)
   for (cb, cr, plot_color) in POLARS_CBCR:
     ax_plot2.plot(
       cb, cr, marker="+", color=plot_color, alpha=1.0
@@ -311,7 +312,7 @@ def viewer(arg):
     [ -122.70176, -114.60118, -103.03966, -89.59697, -75.37581, -61.001846,
       -46.80681, -33.38832]]
 
-  ax_plot3 = fig.add_subplot(424)
+  ax_plot3 = fig.add_subplot(524)
 
   # RGBCyanMagentaYellow の極値のプロット
   for(a_ast, b_ast, plot_color) in POLARS_LAB:
@@ -387,7 +388,7 @@ def viewer(arg):
     (124.773735, -0.690445, '#FF00FF'), (88.01244, 1.8444182, '#C0C000')]
 
   # 角度を横軸、彩度を縦軸としたCIE L*C*hのプロット
-  ax_plot4 = fig.add_subplot(413)
+  ax_plot4 = fig.add_subplot(513)
   for(c_ast, h_ast, plot_color) in POLARS_CH:
     ax_plot4.plot(
       h_ast, c_ast, marker="+", color=plot_color, alpha=1.0
@@ -414,7 +415,7 @@ def viewer(arg):
     (60.323685, -0.690445, '#FF00FF'), (97.13882, 1.8444182, '#C0C000')]
 
   # 角度を横軸、輝度を縦軸としたCIE L*C*hのプロット
-  ax_plot5 = fig.add_subplot(414)
+  ax_plot5 = fig.add_subplot(514)
   for(l_ast, h_ast, plot_color) in POLARS_LH:
     ax_plot5.plot(
       h_ast, l_ast, marker="+", color=plot_color, alpha=1.0
@@ -433,6 +434,25 @@ def viewer(arg):
   ax_plot5.set_xlabel("Hue(h) [radian]")
   ax_plot5.set_ylabel("Luminance(L)")
   ax_plot5.set_title("CIE L*C*h(D50)")
+
+  ax_plot6 = fig.add_subplot(529)
+  ax_plot6.xaxis.set_major_locator(MultipleLocator(np.pi/3))
+  ax_plot6.yaxis.set_major_locator(MultipleLocator(25.0))
+  ax_plot7 = fig.add_subplot(5,2,10)
+  ax_plot7.xaxis.set_major_locator(MultipleLocator(np.pi/3))
+  ax_plot7.yaxis.set_major_locator(MultipleLocator(10.0))
+  BINS_CH = [12, 7] # piの12等分(30度単位)と彩度25単位の7等分
+  BINS_LH = [12, 10]  # piの12等分(30度単位)と輝度10単位の10等分
+  num_ch = ax_plot6.hist2d(
+    cieLch[0:,2], cieLch[0:,1], bins=BINS_CH,
+    range=[[-np.pi, np.pi], [0, 175]], cmap=cm.jet
+  )
+  plt.colorbar(num_ch[3], ax=ax_plot6)
+  num_lh = ax_plot7.hist2d(
+    cieLch[0:,2], cieLch[0:,0], bins=BINS_LH,
+    range=[[-np.pi, np.pi], [0, 100]], cmap=cm.jet
+  )
+  plt.colorbar(num_lh[3], ax=ax_plot7)
 
   print('speed(edjp): ', datetime.datetime.now())
 
