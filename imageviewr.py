@@ -452,6 +452,12 @@ def viewer(arg):
     cieLch[0:,2], cieLch[0:,0], bins=BINS_LH,
     range=[[-np.pi, np.pi], [0, 100]], cmap=cm.jet
   )
+  ax_plot6.set_xlabel("Hue(h) [radian]")
+  ax_plot6.set_ylabel("Chroma(C*)")
+  ax_plot6.set_title("Heatmap of CIE L*C*h(D50)")
+  ax_plot7.set_xlabel("Hue(h) [radian]")
+  ax_plot7.set_ylabel("Luminance(L)")
+  ax_plot7.set_title("Heatmap of CIE L*C*h(D50)")
   plt.colorbar(num_lh[3], ax=ax_plot7)
 
   print('speed(edjp): ', datetime.datetime.now())
