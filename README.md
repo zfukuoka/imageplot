@@ -5,6 +5,11 @@
 
 This program plots color on CIE xy, ITU-R BT.601 CbCr, CIE L\*a\*b\*(D50) and CIE L\*C\*h color space using sample.jpg which located on local file system.
 
+### 動作結果サンプル
+
+![動作結果サンプル画像](https://raw.githubusercontent.com/zfukuoka/imageplot/orphan-doc/sample.png)
+
+
 ## 動作環境 Requirements
 - Python 3.5 or above
 - numpy
