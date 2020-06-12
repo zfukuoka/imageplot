@@ -354,6 +354,28 @@ def viewer(arg):
     (99.95472, 0.671016, '#FF0000'), (114.85239, 2.4424305, '#00FF00'),
     (148.41037, -1.0188428, '#0000FF'), (60.17099, -2.5533612, '#00FFFF'),
     (124.773735, -0.690445, '#FF00FF'), (88.01244, 1.8444182, '#C0C000')]
+  # RGBの原色から補色間のプロット
+  RED_TO_YELLOW_CH = [
+    [ 99.955, 97.637, 92.468, 85.424, 78.774, 74.936, 75.417, 80.228, 88.012],
+    [ 0.671, 0.693, 0.752, 0.860, 1.025, 1.237, 1.467, 1.678, 1.844]]
+  RED_TO_MAGENTA_CH = [
+    [ 99.955, 93.761, 85.949, 81.711, 82.999, 89.375, 99.405, 111.684, 124.774],
+    [ 0.671, 0.577, 0.394, 0.157, -0.089, -0.305, -0.474, -0.600, -0.690]]
+  GREEN_TO_CYAN_CH1 = [
+    [ 114.852, 111.937, 105.419, 96.067, 85.433, 75.020, 66.314],
+    [ 2.442, 2.465, 2.518, 2.608, 2.737, 2.911, 3.137]]
+  GREEN_TO_CYAN_CH2 = [
+    [ 63.100, 60.915, 60.171],
+    [ -3.008, -2.859, -2.553]]
+  GREEN_TO_YELLOW_CH = [
+    [ 114.852, 113.939, 111.716, 108.100, 103.418, 98.283, 93.480, 89.821, 88.012],
+    [ 2.442, 2.434, 2.411, 2.371, 2.310, 2.225, 2.117, 1.986, 1.844]]
+  BLUE_TO_MAGENTA_CH = [
+    [ 148.410, 147.543, 145.496, 142.325, 138.438, 134.334, 130.463, 127.173, 124.774],
+    [ -1.019, -1.014, -1.000, -0.976, -0.940, -0.893, -0.834, -0.765, -0.690]]
+  BLUE_TO_CYAN_CH = [
+    [ 148.410, 141.778, 127.837, 109.658, 91.240, 75.407, 64.142, 59.032, 60.171],
+    [ -1.019, -1.046, -1.112, -1.222, -1.381, -1.599, -1.886, -2.226, -2.553]]
 
   # 角度を横軸、彩度を縦軸としたCIE L*C*hのプロット
   ax_plot4 = fig.add_subplot(513)
@@ -361,6 +383,31 @@ def viewer(arg):
     ax_plot4.plot(
       h_ast, c_ast, marker="+", color=plot_color, alpha=1.0
     )
+  
+  # 補助線のプロット
+  ax_plot4.plot(
+    RED_TO_YELLOW_CH[1], RED_TO_YELLOW_CH[0], color='#FFC000',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot4.plot(
+    RED_TO_MAGENTA_CH[1], RED_TO_MAGENTA_CH[0], color='#FF00C0',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot4.plot(
+    GREEN_TO_CYAN_CH1[1], GREEN_TO_CYAN_CH1[0], color='#00FFC0',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot4.plot(
+    GREEN_TO_CYAN_CH2[1], GREEN_TO_CYAN_CH2[0], color='#00FFC0',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot4.plot(
+    GREEN_TO_YELLOW_CH[1], GREEN_TO_YELLOW_CH[0], color='#C0FF00',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot4.plot(
+    BLUE_TO_MAGENTA_CH[1], BLUE_TO_MAGENTA_CH[0], color='#C000FF',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+  ax_plot4.plot(
+    BLUE_TO_CYAN_CH[1], BLUE_TO_CYAN_CH[0], color='#00C0FF',
+    linestyle="--", alpha=1.0, zorder=-5.0)
+
+  # 画像のプロット
   ax_plot4.plot(
     cieLch[0:,2], cieLch[0:,1], 'k.', alpha=0.3,
     label="color in image")
