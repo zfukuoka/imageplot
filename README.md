@@ -2,8 +2,10 @@
 
 ## 概要 Overview
 ローカルに置いてある samplel.jpg を読み込み、読み込んだ画像の色をCIE xyz空間、ITU-R BT.601 CbCr空間、CIE L\*a\*b\*(D50)、CIE L\*C\*h(D50)にプロットします。
+sample.jpg の代わりに引数に画像ファイルを指定することもできます。
 
 This program plots color on CIE xy, ITU-R BT.601 CbCr, CIE L\*a\*b\*(D50) and CIE L\*C\*h color space using sample.jpg which located on local file system.
+Specifing image file as parameter, It can plots on behalf of sample.jpg.
 
 ### 動作結果サンプル Example image
 
