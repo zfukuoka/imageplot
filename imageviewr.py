@@ -136,6 +136,7 @@ def convertToCieLch(cieLab):
 
 def plotAuxiliaryLine(axe, colorspace, target1, target2):
   AUX_KEY = 'auxiliary_line'
+  PLOTCOLOR_KEY = 'plot_color'
   auxline_file = open('auxiliary_line.json')
   auxline = json.load(auxline_file)
 
@@ -146,9 +147,13 @@ def plotAuxiliaryLine(axe, colorspace, target1, target2):
   for key, value in auxline[colorspace][AUX_KEY].items():
     if target1 in value and target2 in value:
       # print("good key:", key)
+      if PLOTCOLOR_KEY in value:
+        plot_color = value[PLOTCOLOR_KEY]
+      else:
+        plot_color = '#000000'
       axe.plot(
         value[target1], value[target2],
-        color='#0000FF', linestyle="--", alpha=1.0, zorder=-5.0
+        color=plot_color, linestyle="--", alpha=1.0, zorder=-5.0
       )
 
 
@@ -344,7 +349,7 @@ def viewer(arg):
   # ax_plot3.plot(
   #   BLUE_TO_CYAN_AB[0], BLUE_TO_CYAN_AB[1], color='#00C0FF',
   #   linestyle="--", alpha=1.0, zorder=-5.0)
-  plotAuxiliaryLine(ax_plot3, 'srgb', 'CIELab_a', 'CIELab_b')
+  plotAuxiliaryLine(ax_plot3, 'srgb', 'CIELab_D50_a', 'CIELab_D50_b')
 
   # CIE L*a*b* のプロット
   ax_plot3.plot(
