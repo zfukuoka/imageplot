@@ -263,92 +263,16 @@ def viewer(arg):
     (78.28357, 62.150043, '#FF0000'), (-87.905914, 73.916306, '#00FF00'),
     (77.819214, -126.371704, '#0000FF'), (-50.057648, -33.38832, '#00FFFF'),
     (96.19589, -79.46594, '#FF00FF'), (-23.782745, 84.73825, '#C0C000')]
-
-  # sRGBの0,0,0からRGBCyanMagentaYellowへ徐々に同じ割合で増加した座標
-  # RED_AB = [
-  #   [ 0.0, 12.095, 29.082, 38.285, 46.960, 55.249, 63.237, 70.980, 78.284],
-  #   [ 0.0, 4.257, 14.891, 26.528, 36.149, 43.839, 50.205, 56.351, 62.150]]
-  # GREEN_AB = [
-  #   [ 0.0, -19.0713, -32.657, -42.991, -52.732, -62.040, -71.010, -79.704, -87.906],
-  #   [ 0.0, 12.722, 27.324, 36.149, 44.340, 52.167, 59.709, 67.020, 73.916]]
-  # BLUE_AB = [
-  #   [ 0.0, 6.466, 22.875, 38.032, 46.681, 54.921, 62.862, 70.559, 77.819],
-  #   [ 0.0, -21.846, -44.533, -61.793, -75.807, -89.188, -102.083, -114.581, -126.372]]
-  # CYAN_AB = [
-  #   [ 0.0, -12.093, -18.596, -24.481, -30.028, -35.329, -40.436, -45.387, -50.058],
-  #   [ 0.0, -8.131, -12.404, -16.329, -20.029, -23.564, -26.971, -30.273, -33.388]]
-  # MAGENTA_AB = [
-  #   [ 0.0, 18.561, 35.736, 47.045, 57.705, 67.891, 77.707, 87.221, 96.196],
-  #   [ 0.0, -17.406, -29.521, -38.863, -47.669, -56.083, -64.192, -72.052, -79.466]]
-  # YELLOW_AB = [
-  #   [ 0.0, -5.792, -8.835, -11.631, -14.267, -16.785, -19.212, -21.564, -23.783],
-  #   [ 0.0, 16.143, 31.476, 41.442, 50.832, 59.805, 68.451, 76.832, 84.738]]
     
-  # RGBの原色から補色間のプロット
-  # RED_TO_YELLOW_AB = [
-  #   [ 78.284, 75.094, 67.533, 55.717, 40.909, 24.558, 7.814, -8.587, -23.783],
-  #   [ 62.150, 62.402, 63.164, 64.752, 67.318, 70.798, 75.012, 79.767, 84.738]]
-  # RED_TO_MAGENTA_AB = [
-  #   [ 78.284, 78.589, 79.359, 80.705, 82.671, 85.258, 88.436, 92.150, 96.196],
-  #   [ 62.150, 51.137, 33.008, 12.780, -7.368, -26.811, -45.392, -63.101, -79.466]]
-  # GREEN_TO_CYAN_AB = [
-  #   [ -87.906, -87.252, -85.604, -82.725, -78.532, -73.035, -66.314, -58.504, -50.058],
-  #   [ 73.916, 70.120, 61.523, 48.841, 33.638, 17.146, 0.132, -16.968, -33.388]]
-  # GREEN_TO_YELLOW_AB = [
-  #   [ -87.906, -86.561, -83.221, -77.752, -69.643, -59.815, -48.520, -36.231, -23.783],
-  #   [ 73.916, 74.090, 74.531, 75.307, 76.453, 77.985, 79.902, 82.190, 84.738]]
-  # BLUE_TO_MAGENTA_AB = [
-  #   [ 77.819, 78.020, 78.586, 79.725, 81.603, 84.281, 87.708, 91.773, 96.196],
-  #   [ -126.372, -125.227, -122.447, -117.900, -111.831, -104.606, -96.581, -88.038, -79.466]]
-  # BLUE_TO_CYAN_AB = [
-  #   [77.819, 71.031, 56.646, 37.518, 17.238, -2.156, -19.920, -35.972, -50.058],
-  #   [-126.372, -122.702, -114.601, -103.040, -89.597, -75.376, -61.002, -46.807, -33.388]]
-
   ax_plot3 = fig.add_subplot(524)
 
   # RGBCyanMagentaYellow の極値のプロット
-  # for(a_ast, b_ast, plot_color) in POLARS_LAB:
-  #   ax_plot3.plot(
-  #     a_ast, b_ast, marker="+", color=plot_color, alpha=1.0
-  #   )
+  for(a_ast, b_ast, plot_color) in POLARS_LAB:
+    ax_plot3.plot(
+      a_ast, b_ast, marker="+", color=plot_color, alpha=1.0
+    )
   
   # 補助線のプロット
-  # ax_plot3.plot(
-  #   RED_AB[0], RED_AB[1], color='#FF0000',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   GREEN_AB[0], GREEN_AB[1], color='#00FF00',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   BLUE_AB[0], BLUE_AB[1], color='#0000FF',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   CYAN_AB[0], CYAN_AB[1], color='#00FFFF',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   MAGENTA_AB[0], MAGENTA_AB[1], color='#FF00FF',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   YELLOW_AB[0], YELLOW_AB[1], color='#C0C000',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   RED_TO_YELLOW_AB[0], RED_TO_YELLOW_AB[1], color='#FFC000',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   RED_TO_MAGENTA_AB[0], RED_TO_MAGENTA_AB[1], color='#FF00C0',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   GREEN_TO_CYAN_AB[0], GREEN_TO_CYAN_AB[1], color='#00FFC0',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   GREEN_TO_YELLOW_AB[0], GREEN_TO_YELLOW_AB[1], color='#C0FF00',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   BLUE_TO_MAGENTA_AB[0], BLUE_TO_MAGENTA_AB[1], color='#C000FF',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
-  # ax_plot3.plot(
-  #   BLUE_TO_CYAN_AB[0], BLUE_TO_CYAN_AB[1], color='#00C0FF',
-  #   linestyle="--", alpha=1.0, zorder=-5.0)
   plotAuxiliaryLine(ax_plot3, 'srgb', 'CIELab_D50_a', 'CIELab_D50_b')
 
   # CIE L*a*b* のプロット
@@ -515,14 +439,17 @@ viewer(sys.argv)
 # test_np = np.array([
 #     [[255, 0, 0], [0, 255, 0]],
 #     [[0, 0, 255], [255, 255, 255]] ])
+
 # test_np = np.array([
 #   [[255, 0, 0], [0, 255, 0], [0, 0, 255]],
 #   [[0,255, 255], [255, 0, 255], [255, 255, 0]]
 # ])
+
 # test_np = np.r_[np.array([0,0,0])]
 # for i in range(15):
 #   test_np = np.r_[test_np, np.array([16*(i+1),0,16*(i+1)])]
 # test_np.resize(4,4,3)
+
 # test_np2 = normalizeRgb(test_np)
 # test_np3 = convertToCieXYZ(test_np2)
 # test_np4 = convertToCiexyz(test_np3)
@@ -542,22 +469,22 @@ viewer(sys.argv)
 # print(test_np6)
 # print("test_np7")
 # print(test_np7)
-print("For json")
-print("\"rgb_r\":", test_np[:,:,0].flatten().tolist())
-print("\"rgb_g\":", test_np[:,:,1].flatten().tolist())
-print("\"rgb_b\":", test_np[:,:,2].flatten().tolist())
-print("\"CIEXYZ_X\":", test_np3[:,0].tolist())
-print("\"CIEXYZ_Y\":", test_np3[:,1].tolist())
-print("\"CIEXYZ_Z\":", test_np3[:,2].tolist())
-print("\"CIExyz_x\":", test_np4[:,0].tolist())
-print("\"CIExyz_y\":", test_np4[:,1].tolist())
-print("\"CIExyz_z\":", test_np4[:,2].tolist())
-print("\"YCbCr_Y\":",  test_np5[:,0].tolist())
-print("\"YCbCr_Cb\":", test_np5[:,1].tolist())
-print("\"YCbCr_Cr\":", test_np5[:,2].tolist())
-print("\"CIELab_D50_L\":", test_np6[:,0].tolist())
-print("\"CIELab_D50_a\":", test_np6[:,1].tolist())
-print("\"CIELab_D50_b\":", test_np6[:,2].tolist())
-print("\"CIELCh_D50_L\":", test_np7[:,0].tolist())
-print("\"CIELCh_D50_C\":", test_np7[:,1].tolist())
-print("\"CIELCh_D50_h\":", test_np7[:,2].tolist())
+# print("For json")
+# print("\"rgb_r\":", test_np[:,:,0].flatten().tolist())
+# print("\"rgb_g\":", test_np[:,:,1].flatten().tolist())
+# print("\"rgb_b\":", test_np[:,:,2].flatten().tolist())
+# print("\"CIEXYZ_X\":", test_np3[:,0].tolist())
+# print("\"CIEXYZ_Y\":", test_np3[:,1].tolist())
+# print("\"CIEXYZ_Z\":", test_np3[:,2].tolist())
+# print("\"CIExyz_x\":", test_np4[:,0].tolist())
+# print("\"CIExyz_y\":", test_np4[:,1].tolist())
+# print("\"CIExyz_z\":", test_np4[:,2].tolist())
+# print("\"YCbCr_Y\":",  test_np5[:,0].tolist())
+# print("\"YCbCr_Cb\":", test_np5[:,1].tolist())
+# print("\"YCbCr_Cr\":", test_np5[:,2].tolist())
+# print("\"CIELab_D50_L\":", test_np6[:,0].tolist())
+# print("\"CIELab_D50_a\":", test_np6[:,1].tolist())
+# print("\"CIELab_D50_b\":", test_np6[:,2].tolist())
+# print("\"CIELCh_D50_L\":", test_np7[:,0].tolist())
+# print("\"CIELCh_D50_C\":", test_np7[:,1].tolist())
+# print("\"CIELCh_D50_h\":", test_np7[:,2].tolist())
