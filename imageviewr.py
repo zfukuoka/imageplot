@@ -134,27 +134,50 @@ def convertToCieLch(cieLab):
   return np.c_[cieLab[0:,0], c, h]
 
 
+def plotPolarPoint(axe, colorspace, target1, target2):
+  POLAR_KEY = 'polar'
+  PLOTCOLOR_KEY = 'plot_color'
+  with open('auxiliary_line.json') as auxline_file:
+    polor_point = json.load(auxline_file)
+
+    if not colorspace in polor_point:
+      return
+    if not POLAR_KEY in polor_point[colorspace]:
+      return
+    for key, value in polor_point[colorspace][POLAR_KEY].items():
+      if target1 in value and target2 in value:
+        if PLOTCOLOR_KEY in value:
+          plot_color = value[PLOTCOLOR_KEY]
+        else:
+          plot_color = '#000000'
+        axe.plot(
+          value[target1], value[target2],
+          color=plot_color, marker="+", linestyle="",
+          alpha=1.0, zorder=-5.0
+        )
+
+        
 def plotAuxiliaryLine(axe, colorspace, target1, target2):
   AUX_KEY = 'auxiliary_line'
   PLOTCOLOR_KEY = 'plot_color'
-  auxline_file = open('auxiliary_line.json')
-  auxline = json.load(auxline_file)
+  with open('auxiliary_line.json') as auxline_file:
+    auxline = json.load(auxline_file)
 
-  if not colorspace in auxline:
-    return
-  if not AUX_KEY in auxline[colorspace]:
-    return
-  for key, value in auxline[colorspace][AUX_KEY].items():
-    if target1 in value and target2 in value:
-      # print("good key:", key)
-      if PLOTCOLOR_KEY in value:
-        plot_color = value[PLOTCOLOR_KEY]
-      else:
-        plot_color = '#000000'
-      axe.plot(
-        value[target1], value[target2],
-        color=plot_color, linestyle="--", alpha=1.0, zorder=-5.0
-      )
+    if not colorspace in auxline:
+      return
+    if not AUX_KEY in auxline[colorspace]:
+      return
+    for key, value in auxline[colorspace][AUX_KEY].items():
+      if target1 in value and target2 in value:
+        # print("good key:", key)
+        if PLOTCOLOR_KEY in value:
+          plot_color = value[PLOTCOLOR_KEY]
+        else:
+          plot_color = '#000000'
+        axe.plot(
+          value[target1], value[target2],
+          color=plot_color, linestyle="--", alpha=1.0, zorder=-5.0
+        )
 
 
 def viewer(arg):
@@ -258,20 +281,11 @@ def viewer(arg):
   ax_plot2.set_ylabel("Cr")
   ax_plot2.set_title("CbCr")
 
-  # RGBCyanMagentaYellowのCIE L*a*b*座標とプロット色
-  POLARS_LAB = [
-    (78.28357, 62.150043, '#FF0000'), (-87.905914, 73.916306, '#00FF00'),
-    (77.819214, -126.371704, '#0000FF'), (-50.057648, -33.38832, '#00FFFF'),
-    (96.19589, -79.46594, '#FF00FF'), (-23.782745, 84.73825, '#C0C000')]
-    
   ax_plot3 = fig.add_subplot(524)
 
   # RGBCyanMagentaYellow の極値のプロット
-  for(a_ast, b_ast, plot_color) in POLARS_LAB:
-    ax_plot3.plot(
-      a_ast, b_ast, marker="+", color=plot_color, alpha=1.0
-    )
-  
+  plotPolarPoint(ax_plot3, 'srgb', 'CIELab_D50_a', 'CIELab_D50_b')
+
   # 補助線のプロット
   plotAuxiliaryLine(ax_plot3, 'srgb', 'CIELab_D50_a', 'CIELab_D50_b')
 
