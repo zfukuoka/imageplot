@@ -249,20 +249,15 @@ def viewer(arg):
   ax_plot.set_ylabel("y")
   ax_plot.set_title("CIE xy")
 
-  # RGBWCyanMagentaYellowのCbCr座標とプロット色
-  POLARS_CBCR = [
-    (-0.168736, 0.5, '#FF0000'), (-0.331264, -0.418688, '#00FF00'),
-    (0.5, -0.081312, '#0000FF'), (0.0, 0.0, '#000000'),
-    (0.168736, -0.5, '#00FFFF'), (0.331264, 0.418688, '#FF00FF'),
-    (-0.5, 0.081312, '#C0C000')
-  ]
-  
   # YCbCrのプロット
   ax_plot2 = fig.add_subplot(523)
-  for (cb, cr, plot_color) in POLARS_CBCR:
-    ax_plot2.plot(
-      cb, cr, marker="+", color=plot_color, alpha=1.0
-    )
+
+  # 極値(RGBCyanMagentaYellow)を Cb/Cr のグラフにプロット
+  plotPolarPoint(ax_plot2, 'srgb', 'YCbCr_Cb', 'YCbCr_Cr')
+
+  # 補助線のプロット
+  plotAuxiliaryLine(ax_plot2, 'srgb', 'YCbCr_Cb', 'YCbCr_Cr')
+
   ax_plot2.plot(
     ycbcr[0:, 1], ycbcr[0:, 2], 'k.', alpha=0.3,
     label="color in image")
