@@ -180,6 +180,69 @@ def plotAuxiliaryLine(axe, colorspace, target1, target2):
         )
 
 
+def debug_print():
+  # テストデータで0～255のRGB256諧調を前提とする
+  #test_np = np.arange(27).reshape(3,3,3)
+  #test_np = np.linspace(228, 255, 27).reshape(3,3,3)
+
+  # sRGB Red Green Blue White point
+  test_np = np.array([
+      [[255, 0, 0], [0, 255, 0]],
+      [[0, 0, 255], [255, 255, 255]] ])
+
+  # sRGB Red/Blue/Green/Cyan/Magenta/Yellow point
+  # test_np = np.array([
+  #   [[255, 0, 0], [0, 255, 0], [0, 0, 255]],
+  #   [[0,255, 255], [255, 0, 255], [255, 255, 0]]
+  # ])
+
+  # sRGB Black to Yellow
+  # test_np = np.r_[np.array([0,0,0])]
+  # for i in range(15):
+  #   test_np = np.r_[test_np, np.array([16*(i+1),0,16*(i+1)])]
+  # test_np.resize(4,4,3)
+
+  test_np2 = normalizeRgb(test_np)
+  test_np3 = convertToCieXYZ(test_np2)
+  test_np4 = convertToCiexyz(test_np3)
+  test_np5 = convertToYCbCr(test_np2)
+  test_np6 = convertToCielab(test_np3)
+  test_np7 = convertToCieLch(test_np6)
+
+  print("test_np2")
+  print(test_np2)
+  print("test_np3")
+  print(test_np3)
+  print("test_np4")
+  print(test_np4)
+  print("test_np5")
+  print(test_np5)
+  print("test_np6")
+  print(test_np6)
+  print("test_np7")
+  print(test_np7)
+
+  # print("For json")
+  # print("\"rgb_r\":", test_np[:,:,0].flatten().tolist(), ), 
+  # print("\"rgb_g\":", test_np[:,:,1].flatten().tolist())
+  # print("\"rgb_b\":", test_np[:,:,2].flatten().tolist())
+  # print("\"CIEXYZ_X\":", test_np3[:,0].tolist())
+  # print("\"CIEXYZ_Y\":", test_np3[:,1].tolist())
+  # print("\"CIEXYZ_Z\":", test_np3[:,2].tolist())
+  # print("\"CIExyz_x\":", test_np4[:,0].tolist())
+  # print("\"CIExyz_y\":", test_np4[:,1].tolist())
+  # print("\"CIExyz_z\":", test_np4[:,2].tolist())
+  # print("\"YCbCr_Y\":",  test_np5[:,0].tolist())
+  # print("\"YCbCr_Cb\":", test_np5[:,1].tolist())
+  # print("\"YCbCr_Cr\":", test_np5[:,2].tolist())
+  # print("\"CIELab_D50_L\":", test_np6[:,0].tolist())
+  # print("\"CIELab_D50_a\":", test_np6[:,1].tolist())
+  # print("\"CIELab_D50_b\":", test_np6[:,2].tolist())
+  # print("\"CIELCh_D50_L\":", test_np7[:,0].tolist())
+  # print("\"CIELCh_D50_C\":", test_np7[:,1].tolist())
+  # print("\"CIELCh_D50_h\":", test_np7[:,2].tolist())
+
+
 def viewer(arg):
   print('speed(opjp): ', datetime.datetime.now())
   if(len(arg) > 1):
@@ -224,15 +287,11 @@ def viewer(arg):
   ax_img.set_title("Image")
 
   # CIE xy のプロット
-  # RGBWのCIE xy座標
-  POLARS = np.array([
-      [0.64, 0.33], [0.30, 0.60],
-      [0.15, 0.06], [0.3127, 0.3290]
-    ])
   ax_plot = fig.add_subplot(522)
-  ax_plot.plot(
-    POLARS[0:,0], POLARS[0:,1], "r+",
-    label="R/G/B polar and white point in sRGB color space")
+
+  # 極値(RGBCyanMagentaYellow)を CIE xy色度 のグラフにプロット
+  plotPolarPoint(ax_plot, 'srgb', 'CIExyz_x', 'CIExyz_y')
+
   ax_plot.plot(x, y, 'k.', alpha=0.3, label="color in image")
 
   # 描画の補助情報(描画範囲、メジャーとマイナーのメモリとグリッド線)
@@ -387,59 +446,5 @@ def viewer(arg):
 
 viewer(sys.argv)
 
-# テストデータで0～255のRGB256諧調を前提とする
-#test_np = np.arange(27).reshape(3,3,3)
-#test_np = np.linspace(228, 255, 27).reshape(3,3,3)
-# sRGB Red Green Blue White point
-# test_np = np.array([
-#     [[255, 0, 0], [0, 255, 0]],
-#     [[0, 0, 255], [255, 255, 255]] ])
+# debug_print()
 
-# test_np = np.array([
-#   [[255, 0, 0], [0, 255, 0], [0, 0, 255]],
-#   [[0,255, 255], [255, 0, 255], [255, 255, 0]]
-# ])
-
-# test_np = np.r_[np.array([0,0,0])]
-# for i in range(15):
-#   test_np = np.r_[test_np, np.array([16*(i+1),0,16*(i+1)])]
-# test_np.resize(4,4,3)
-
-# test_np2 = normalizeRgb(test_np)
-# test_np3 = convertToCieXYZ(test_np2)
-# test_np4 = convertToCiexyz(test_np3)
-# test_np5 = convertToYCbCr(test_np2)
-# test_np6 = convertToCielab(test_np3)
-# test_np7 = convertToCieLch(test_np6)
-#
-# print("test_np2")
-# print(test_np2)
-# print("test_np3")
-# print(test_np3)
-# print("test_np4")
-# print(test_np4)
-# print("test_np5")
-# print(test_np5)
-# print("test_np6")
-# print(test_np6)
-# print("test_np7")
-# print(test_np7)
-# print("For json")
-# print("\"rgb_r\":", test_np[:,:,0].flatten().tolist())
-# print("\"rgb_g\":", test_np[:,:,1].flatten().tolist())
-# print("\"rgb_b\":", test_np[:,:,2].flatten().tolist())
-# print("\"CIEXYZ_X\":", test_np3[:,0].tolist())
-# print("\"CIEXYZ_Y\":", test_np3[:,1].tolist())
-# print("\"CIEXYZ_Z\":", test_np3[:,2].tolist())
-# print("\"CIExyz_x\":", test_np4[:,0].tolist())
-# print("\"CIExyz_y\":", test_np4[:,1].tolist())
-# print("\"CIExyz_z\":", test_np4[:,2].tolist())
-# print("\"YCbCr_Y\":",  test_np5[:,0].tolist())
-# print("\"YCbCr_Cb\":", test_np5[:,1].tolist())
-# print("\"YCbCr_Cr\":", test_np5[:,2].tolist())
-# print("\"CIELab_D50_L\":", test_np6[:,0].tolist())
-# print("\"CIELab_D50_a\":", test_np6[:,1].tolist())
-# print("\"CIELab_D50_b\":", test_np6[:,2].tolist())
-# print("\"CIELCh_D50_L\":", test_np7[:,0].tolist())
-# print("\"CIELCh_D50_C\":", test_np7[:,1].tolist())
-# print("\"CIELCh_D50_h\":", test_np7[:,2].tolist())
