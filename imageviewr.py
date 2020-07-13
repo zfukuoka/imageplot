@@ -134,7 +134,7 @@ def convertToCieLch(cieLab):
   return np.c_[cieLab[0:,0], c, h]
 
 
-def plotPolarPoint(axe, colorspace, target1, target2):
+def plotPolarPoint(axe, colorspace, target1, target2, color=None):
   POLAR_KEY = 'polar'
   PLOTCOLOR_KEY = 'plot_color'
   with open('auxiliary_line.json') as auxline_file:
@@ -146,10 +146,13 @@ def plotPolarPoint(axe, colorspace, target1, target2):
       return
     for key, value in polor_point[colorspace][POLAR_KEY].items():
       if target1 in value and target2 in value:
-        if PLOTCOLOR_KEY in value:
-          plot_color = value[PLOTCOLOR_KEY]
+        if color is None:
+          if PLOTCOLOR_KEY in value:
+            plot_color = value[PLOTCOLOR_KEY]
+          else:
+            plot_color = '#000000'
         else:
-          plot_color = '#000000'
+          plot_color = color
         axe.plot(
           value[target1], value[target2],
           color=plot_color, marker="+", linestyle="",
