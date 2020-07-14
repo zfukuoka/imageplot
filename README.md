@@ -5,9 +5,16 @@
 sample.jpg の代わりに引数に画像ファイルを指定することもできます。
 
 This program plots color on CIE xy, ITU-R BT.601 CbCr, CIE L\*a\*b\*(D50) and CIE L\*C\*h color space using sample.jpg which located on local file system.
-Specifing image file as parameter, It can plots on behalf of sample.jpg.
+Specifing image file as parameter, it can plots on behalf of sample.jpg.
 
 ### 動作結果サンプル Example image
+
+- プロット図内の＋は、sRGB色空間の赤(255,0,0)、緑(0,255,0)、青(0,0,255)、シアン(0,255,255)、マゼンタ(255,0,255)、イエロー(255,255,0)を示す
+- プロット図内の破線は、sRGB色空間の最大の彩度を示す
+
+- "+" marker style points red(255,0,0), green(0,255,0), blue(0,0,255), cyan(0,255,255), magenta(255,0,255) and yellow(255,255,0) in sRGB color space.
+- dash line points maximum saturation in sRGB color space.
+
 
 ![動作結果サンプル画像](https://raw.githubusercontent.com/zfukuoka/imageplot/orphan-doc/sample.png)
 
@@ -17,6 +24,10 @@ Specifing image file as parameter, It can plots on behalf of sample.jpg.
 - numpy
 - matplotlib
 - Pillow
+- The Python Standard Library
+  - datetime
+  - json
+  - sys
 
 ## 制限事項 Restictions
 - 全ピクセルを処理すると、時間がかかるため間引きしています
@@ -25,6 +36,13 @@ Specifing image file as parameter, It can plots on behalf of sample.jpg.
   - 近年のiPhoneは、jpegに異なる色空間(Display P3)を用いているので、正しく動作しません
 - CrCb及び、L\*a\*b\*(D50)、L\*C\*h(D50)のプロットは動作検証できていないので、動作保証しません
 - ここでは見える形で色の変換を実装するため、PillowやOpenCVなどで実装されている色の変換機能を利用せず、自前で色変換を行っております
+
+- For time-saving, picture data is thinned.
+- No aborting implementation when occuring error. My major aim in this program are substantiative experiment for converting color space without image library and skill upgrading training for Python 3.x.
+- Target image format in this program is JPEG which has sRGB color space and gamma 2.2.
+  - JPEG picture which is taken by recent iPhone series isn't support. Because it has different color space from sRGB called "Display P3".
+- Results of converting to YCbCr, CIE L\*a\*b\*(D50) and CIE L\*C\*h(D50) aren't guaranteed. Because it don't have data for check.
+
 
 ## 参考文献 References
 
@@ -47,6 +65,9 @@ Specifing image file as parameter, It can plots on behalf of sample.jpg.
 
 下表はある時点のソースを用いて、Raspberry Pi 2 で実行にかかった時間（時間計測を行っている出力の期間）を記す。
 なお、Out of order に対応した 今時のそこそこのCPU環境( Core i7、 Rapberry Pi 4、Jetson nanoなど)ではコード完成初期バージョンですら、2～3秒程度で終わってしまうので、割愛。
+
+Followings are benchmark data for taking time on Raspberry Pi2.
+BTW, it takes 3 or less seconds on recent major CPUs(Intel Core i7 / Raspberry Pi4 / Jetson Nano) using initial version. Because these CPUs have function called out of order.
 
 | date of codes | elapsed time | memo |
 | :---: | ---: | :--- |
