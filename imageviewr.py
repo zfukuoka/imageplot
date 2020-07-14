@@ -160,7 +160,7 @@ def plotPolarPoint(axe, colorspace, target1, target2, color=None):
         )
 
         
-def plotAuxiliaryLine(axe, colorspace, target1, target2):
+def plotAuxiliaryLine(axe, colorspace, target1, target2, color=None):
   AUX_KEY = 'auxiliary_line'
   PLOTCOLOR_KEY = 'plot_color'
   with open('auxiliary_line.json') as auxline_file:
@@ -172,11 +172,13 @@ def plotAuxiliaryLine(axe, colorspace, target1, target2):
       return
     for key, value in auxline[colorspace][AUX_KEY].items():
       if target1 in value and target2 in value:
-        # print("good key:", key)
-        if PLOTCOLOR_KEY in value:
-          plot_color = value[PLOTCOLOR_KEY]
+        if color is None:
+          if PLOTCOLOR_KEY in value:
+            plot_color = value[PLOTCOLOR_KEY]
+          else:
+            plot_color = '#000000'
         else:
-          plot_color = '#000000'
+          plot_color = color
         axe.plot(
           value[target1], value[target2],
           color=plot_color, linestyle="--", alpha=1.0, zorder=-5.0
