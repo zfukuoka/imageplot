@@ -135,15 +135,15 @@ def convertToCieLch(cieLab):
 
 
 def plotPolarPoint(axe, colorspace, target1, target2, color=None, marker="+"):
-  """[Plots polar points which is read from auxiliary_line.json.]
+  """Plots polar points which is read from auxiliary_line.json.
 
   Args:
-      axe ([matplotlib.axes.Axes]): [Target axe for plotting]
-      colorspace ([str]): [Group key defined in json]
-      target1 ([str]): [Array data key defined under "colorspace". Plots this key-value on x-axis]
-      target2 ([str]): [Array data key defined under "colorspace". Plots this key-value on y-axis]
-      color ([type], optional): [Color parameter defined by matplotlib. When specified "None", set color defined by json or "#000000"]. Defaults to None.
-      marker (str, optional): [Marker style parameter defined by matplotlib]. Defaults to "+".
+      axe (matplotlib.axes.Axes): Target axe for plotting.
+      colorspace (str): Group key defined in json.
+      target1 (str): Array data key defined under "colorspace". Plots this key-value on x-axis.
+      target2 (str): Array data key defined under "colorspace". Plots this key-value on y-axis.
+      color (type, optional): Color parameter defined by matplotlib. When specified "None", set color defined by json or "#000000". Defaults to None.
+      marker (str, optional): Marker style parameter defined by matplotlib. Defaults to "+".
   """
   POLAR_KEY = 'polar'
   PLOTCOLOR_KEY = 'plot_color'
@@ -171,15 +171,15 @@ def plotPolarPoint(axe, colorspace, target1, target2, color=None, marker="+"):
 
         
 def plotAuxiliaryLine(axe, colorspace, target1, target2, color=None, linestyle="--"):
-  """[Plots auxiliary line which is read from auxiliary_line.json.]
+  """Plots auxiliary line which is read from auxiliary_line.json.
 
   Args:
-      axe ([matplotlib.axes.Axes]): [Target axe for plotting]
-      colorspace ([str]): [Group key defined in json]
-      target1 ([str]): [Array data key defined under "colorspace". Plots this key-value on x-axis]
-      target2 ([str]): [Array data key defined under "colorspace". Plots this key-value on y-axis]
-      color ([type], optional): [Color parameter defined by matplotlib. When specified "None", set color defined by json or "#000000"]. Defaults to None.
-      linestyle (str, optional): [Line style parameter defined by matplotlib]. Defaults to "--".
+      axe (matplotlib.axes.Axes): Target axe for plotting.
+      colorspace (str): Group key defined in json.
+      target1 (str): Array data key defined under "colorspace". Plots this key-value on x-axis.
+      target2 (str): Array data key defined under "colorspace". Plots this key-value on y-axis.
+      color (type, optional): Color parameter defined by matplotlib. When specified "None", set color defined by json or "#000000". Defaults to None.
+      linestyle (str, optional): Line style parameter defined by matplotlib. Defaults to "--".
   """
   AUX_KEY = 'auxiliary_line'
   PLOTCOLOR_KEY = 'plot_color'
@@ -206,6 +206,8 @@ def plotAuxiliaryLine(axe, colorspace, target1, target2, color=None, linestyle="
 
 
 def debug_print():
+  """Print for debug or output of json 
+  """  
   # テストデータで0～255のRGB256諧調を前提とする
   #test_np = np.arange(27).reshape(3,3,3)
   #test_np = np.linspace(228, 255, 27).reshape(3,3,3)
