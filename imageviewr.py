@@ -467,8 +467,8 @@ def viewer(arg):
 
   print('speed(edjp): ', datetime.datetime.now())
 
-  # plt.show()
-  plt.savefig("sample.png",format = 'png', dpi=120)
+  plt.show()
+  # plt.savefig("sample.png",format = 'png', dpi=120)
 
 
 viewer(sys.argv)
