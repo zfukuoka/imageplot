@@ -10,10 +10,10 @@ Specifing image file as parameter, it can plots on behalf of sample.jpg.
 ### 動作結果サンプル Example image
 
 - プロット図内の＋は、sRGB色空間の赤(255,0,0)、緑(0,255,0)、青(0,0,255)、シアン(0,255,255)、マゼンタ(255,0,255)、イエロー(255,255,0)を示す
-- プロット図内の破線は、sRGB色空間の最大の彩度を示す
+- プロット図内の破線は、sRGB色空間の最大の彩度と無再度(0,0,0)と３原色・補色間を示す
 
 - "+" marker style points red(255,0,0), green(0,255,0), blue(0,0,255), cyan(0,255,255), magenta(255,0,255) and yellow(255,255,0) in sRGB color space.
-- dash line points maximum saturation in sRGB color space.
+- dash line points maximum saturation in sRGB color space and intermediate between minimum saturation(0,0,0) and maximum saturation of red/green/blue/cyan/magenta/yellow.
 
 
 ![動作結果サンプル画像](https://raw.githubusercontent.com/zfukuoka/imageplot/orphan-doc/sample.png)
@@ -34,7 +34,7 @@ Specifing image file as parameter, it can plots on behalf of sample.jpg.
 - 実装例を示すことと自身のプログラミングの習得を目的としているため、異常終了などの処理は全く行っていません
 - 対象となる画像はjpegのみとしており、色空間がsRGB、ガンマ2.2を前提とした実装になっています
   - 近年のiPhoneは、jpegに異なる色空間(Display P3)を用いているので、正しく動作しません
-- CrCb及び、L\*a\*b\*(D50)、L\*C\*h(D50)のプロットは動作検証できていないので、動作保証しません
+- YCbCr及び、L\*a\*b\*(D50)、L\*C\*h(D50)のプロットは動作検証できていないので、動作保証しません
 - ここでは見える形で色の変換を実装するため、PillowやOpenCVなどで実装されている色の変換機能を利用せず、自前で色変換を行っております
 
 - For time-saving, picture data is thinned.
@@ -50,7 +50,7 @@ Specifing image file as parameter, it can plots on behalf of sample.jpg.
   - 昔に購入した資料で、CIE xyへの変換公式で参考にしました
 
 - [YUV - Wikipedia](https://ja.wikipedia.org/wiki/YUV)
-  - YCrCbへの変換公式で参考にしました
+  - YCbCrへの変換公式で参考にしました
 
 - [Lab色空間 - Wikipedia](https://ja.wikipedia.org/wiki/Lab%E8%89%B2%E7%A9%BA%E9%96%93)
   - CIE L\*a\*b\* への変換公式で参考にしました
