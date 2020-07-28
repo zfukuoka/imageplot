@@ -48,6 +48,14 @@ def normalizeRgb(originPixel):
 
 # convert from normalized RGB to CIE XYZ
 def convertToCieXYZ(normalizedRgb):
+  """Convert from normalized RGB image to CIE XYZ data using matrix for sRGB.
+
+  Args:
+      normalizedRgb (numpy.ndarray): Normalized and reverted gamma correction image data(height/width/RGB).
+
+  Returns:
+      numpy.ndarray: CIE XYZ data has 2 dimensional data(serialized array/XYZ).
+  """  
   # RGB of sRGB color space to CIE XYZ convert matrix
   MATRIX = np.array([
     [0.412424, 0.357579, 0.180464],
