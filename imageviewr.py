@@ -15,6 +15,14 @@ import sys
 DEFAULT_DTYPE = np.float32
 
 def normalizeRgb(originPixel):
+  """Normalize RGB data and revert gamma correction.
+
+  Args:
+      originPixel (numpy.ndarray): Image data which has 3 dimensional data(height/width/RGB). The RGB data takes value from 0 to 255 and corrects gamma curb 2.2.
+
+  Returns:
+      numpy.ndarray: Normalized and reverted gamma correction image data(height/width/RGB).
+  """  
   # JPEGを前提として、RGBの各々の解像度8bit(255)と定義
   RGB_RESOLUTION = 255
 
