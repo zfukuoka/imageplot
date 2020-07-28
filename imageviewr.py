@@ -70,8 +70,15 @@ def convertToCieXYZ(normalizedRgb):
   return ret_arr.reshape(-1, 3)
 
 
-# convert from normalized RGB to YCbCr
 def convertToYCbCr(normalizedRgb):
+  """Convert from normalized RGB image to YCbCr data using matrix for ITU-R BT.601.
+
+  Args:
+      normalizedRgb (numpy.ndarray): Normalized and reverted gamma correction image data(height/width/RGB).
+
+  Returns:
+      numpy.ndarray: YCbCr data has 2 dimensional data(serialized array/YCbCr).
+  """
   # RGB of sRGB color space to YCbCr(ITU-R BT.601) convert matrix
   MATRIX = np.array([
     [ 0.299000,  0.587000,  0.114000],
@@ -86,8 +93,15 @@ def convertToYCbCr(normalizedRgb):
   return ret_arr.reshape(-1, 3)
 
 
-# convert from CIE XYZ to CIE xyz 
 def convertToCiexyz(cieXYZ):
+  """Convert from CIE XYZ data to CIE xyz data.
+
+  Args:
+      cieXYZ (numpy.ndarray): CIE XYZ data.
+
+  Returns:
+      numpy.ndarray: CIE xyz data has 2 dimensional data(serialized array/xyz).
+  """
   # 画素毎にXYZからxyzを算出
   #   x = X / (X + Y + Z)
   #   y = Y / (X + Y + Z)
@@ -95,8 +109,15 @@ def convertToCiexyz(cieXYZ):
   return cieXYZ / np.tile(np.sum(cieXYZ, axis=1), (3,1)).T
 
 
-# convert from CIE XYZ to CIE L*a*b*
 def convertToCielab(cieXYZ):
+  """Convert from CIE XYZ data to CIE L*a*b* data.
+
+  Args:
+      cieXYZ (numpy.ndarray): CIE XYZ data.
+
+  Returns:
+      numpy.ndarray: CIE L*a*b* data has 2 dimensional data(serialized arrray/L*a*b*).
+  """
   # 画素ごとにXYZからL*a*b*を算出
   #   L* = 116 * f(Y/Yn) -16
   #   a* = 500 * (f(X/Xn) - f(Y/Yn))
@@ -142,7 +163,14 @@ def convertToCielab(cieXYZ):
 
 
 def convertToCieLch(cieLab):
-  # (c, h) = convertToCieLch(cieLab)
+  """Convert from CIE L*a*b* data to CIE L*C*h data.
+
+  Args:
+      cieLab (numpy.ndarray): CIE L*a*b* data.
+
+  Returns:
+      numpy.ndarray: CIE L*C*h data has 2 dimensional data(serialized arrray/L*C*h).
+  """
   c = np.sqrt(
     np.power(cieLab[0:,1], 2) + np.power(cieLab[0:,2], 2),
     dtype=DEFAULT_DTYPE)
