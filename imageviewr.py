@@ -43,6 +43,14 @@ def normalizeRgb(originPixel):
       lambda tempPixel: tempPixel/12.92,
       lambda tempPixel: ((tempPixel+0.055)/1.055)**2.4
     ])
+
+  # 正規化RGBが、0.0, 0.0, 0.0 の時、
+  # 後の処理で0除算によるランタイム警告になるので、0に近い最小値に置換
+  ret_arr[np.where(np.sum(ret_arr, axis=2) == 0)] = [
+    np.finfo(DEFAULT_DTYPE).tiny,
+    np.finfo(DEFAULT_DTYPE).tiny,
+    np.finfo(DEFAULT_DTYPE).tiny]
+  
   return ret_arr.astype(DEFAULT_DTYPE)
 
 
