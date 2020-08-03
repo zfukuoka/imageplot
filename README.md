@@ -1,6 +1,7 @@
 # imageplot
 
 ## 概要 Overview
+
 ローカルに置いてある samplel.jpg を読み込み、読み込んだ画像の色をCIE xyz空間、ITU-R BT.601 CbCr空間、CIE L\*a\*b\*(D50)、CIE L\*C\*h(D50)にプロットします。
 sample.jpg の代わりに引数に画像ファイルを指定することもできます。
 
@@ -20,6 +21,7 @@ Specifing image file as parameter, it can plots on behalf of sample.jpg.
 
 
 ## 動作環境 Requirements
+
 - Python 3.5 or above
 - numpy
 - matplotlib
@@ -30,10 +32,12 @@ Specifing image file as parameter, it can plots on behalf of sample.jpg.
   - sys
 
 ## 制限事項 Restictions
+
 - 全ピクセルを処理すると、時間がかかるため間引きしています
 - 実装例を示すことと自身のプログラミングの習得を目的としているため、異常終了などの処理は全く行っていません
 - 対象となる画像はjpegのみとしており、色空間がsRGB、ガンマ2.2を前提とした実装になっています
   - 近年のiPhoneは、jpegに異なる色空間(Display P3)を用いているので、正しく動作しません
+  - ガンマ補正の計算式は幾つかあり、本プログラムでの逆補正では後述の式を用いています
 - YCbCr及び、L\*a\*b\*(D50)、L\*C\*h(D50)のプロットは動作検証できていないので、動作保証しません
 - ここでは見える形で色の変換を実装するため、PillowやOpenCVなどで実装されている色の変換機能を利用せず、自前で色変換を行っております
 
@@ -41,8 +45,28 @@ Specifing image file as parameter, it can plots on behalf of sample.jpg.
 - No aborting implementation when occuring error. My major aim in this program are substantiative experiment for converting color space without image library and skill upgrading training for Python 3.x.
 - Target image format in this program is JPEG which has sRGB color space and gamma 2.2.
   - JPEG picture which is taken by recent iPhone series isn't support. Because it has different color space from sRGB called "Display P3".
+  - Method to correct gamma are several ways. This program uses the formura below. 
 - Results of converting to YCbCr, CIE L\*a\*b\*(D50) and CIE L\*C\*h(D50) aren't guaranteed. Because it don't have data for check.
 
+## 詳細 Details
+
+### ガンマの逆補正 Reverse gamma correction
+
+本プログラムでは下記の公式でガンマ2.2の逆補正をしています。
+
+This program uses following formula for reversed gamma 2.2.
+
+$$
+f(t) = 
+  \begin{cases}
+    \biggl( \frac{t + 0.055}{1.055} \biggr) ^{2.4} & t > 0.04045 \\
+    \frac{t}{12.92} & t \leqq 0.04045 \\
+  \end{cases}
+$$
+
+t は RGB各々を 0 ～ 1に収まるように正規化した値とする
+
+t points each RGB value and takes normalized value from 0.0 to 1.0. 
 
 ## 参考文献 References
 
