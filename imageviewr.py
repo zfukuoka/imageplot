@@ -357,7 +357,7 @@ def viewer(arg):
   y = ciexyz[0:, 1]
 
   # 画像とグラフの同時表示
-  fig = plt.figure(figsize=(18,24))
+  fig = plt.figure(figsize=(10,24))
   fig.subplots_adjust(wspace=0.2)
 
   # 画像表示
