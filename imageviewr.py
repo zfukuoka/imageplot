@@ -4,11 +4,13 @@
 # 必要なライブラリのimport
 from PIL import Image
 import datetime
+from decimal import Decimal, ROUND_HALF_UP
 import json
+import math
 from matplotlib import cm as cm
 from matplotlib import pyplot as plt
 from matplotlib import patches as patches
-from matplotlib.ticker import MultipleLocator, AutoMinorLocator
+from matplotlib.ticker import AutoMinorLocator, FuncFormatter, MultipleLocator
 import numpy as np
 import sys
 
@@ -257,6 +259,11 @@ def plotAuxiliaryLine(axe, colorspace, target1, target2, color=None, linestyle="
         )
 
 
+@FuncFormatter
+def major_formatter_degree(x, pos):
+  return '{:+3d}'.format(int(Decimal(math.degrees(x)).quantize(Decimal('0'), rounding=ROUND_HALF_UP)))
+
+
 def debug_print():
   """Print for debug or output of json 
   """  
@@ -467,8 +474,9 @@ def viewer(arg):
   ax_plot4.grid(linestyle="--", zorder=-10)
   ax_plot4.xaxis.set_minor_locator(AutoMinorLocator(3))
   ax_plot4.yaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot4.xaxis.set_major_formatter(major_formatter_degree)
   ax_plot4.legend()
-  ax_plot4.set_xlabel("Hue(h) [radian]")
+  ax_plot4.set_xlabel("Hue(h) [degree]")
   ax_plot4.set_ylabel("Chroma(C*)")
   ax_plot4.set_title("CIE L*C*h(D50)")
 
@@ -489,17 +497,20 @@ def viewer(arg):
   ax_plot5.grid(linestyle="--", zorder=-10)
   ax_plot5.xaxis.set_minor_locator(AutoMinorLocator(3))
   ax_plot5.yaxis.set_minor_locator(AutoMinorLocator(5))
+  ax_plot5.xaxis.set_major_formatter(major_formatter_degree)
   ax_plot5.legend()
-  ax_plot5.set_xlabel("Hue(h) [radian]")
-  ax_plot5.set_ylabel("Luminance(L)")
+  ax_plot5.set_xlabel("Hue(h) [degree]")
+  ax_plot5.set_ylabel("Luminance(L*)")
   ax_plot5.set_title("CIE L*C*h(D50)")
 
   ax_plot6 = fig.add_subplot(529)
   ax_plot6.xaxis.set_major_locator(MultipleLocator(np.pi/3))
   ax_plot6.yaxis.set_major_locator(MultipleLocator(25.0))
+  ax_plot6.xaxis.set_major_formatter(major_formatter_degree)
   ax_plot7 = fig.add_subplot(5,2,10)
   ax_plot7.xaxis.set_major_locator(MultipleLocator(np.pi/3))
   ax_plot7.yaxis.set_major_locator(MultipleLocator(10.0))
+  ax_plot7.xaxis.set_major_formatter(major_formatter_degree)
   BINS_CH = [12, 7] # piの12等分(30度単位)と彩度25単位の7等分
   BINS_LH = [12, 10]  # piの12等分(30度単位)と輝度10単位の10等分
   num_ch = ax_plot6.hist2d(
@@ -511,11 +522,11 @@ def viewer(arg):
     cieLch[0:,2], cieLch[0:,0], bins=BINS_LH,
     range=[[-np.pi, np.pi], [0, 100]], cmap=cm.jet
   )
-  ax_plot6.set_xlabel("Hue(h) [radian]")
+  ax_plot6.set_xlabel("Hue(h) [degree]")
   ax_plot6.set_ylabel("Chroma(C*)")
   ax_plot6.set_title("Heatmap of CIE L*C*h(D50)")
-  ax_plot7.set_xlabel("Hue(h) [radian]")
-  ax_plot7.set_ylabel("Luminance(L)")
+  ax_plot7.set_xlabel("Hue(h) [degree]")
+  ax_plot7.set_ylabel("Luminance(L*)")
   ax_plot7.set_title("Heatmap of CIE L*C*h(D50)")
   plt.colorbar(num_lh[3], ax=ax_plot7)
 
