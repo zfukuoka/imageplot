@@ -27,9 +27,7 @@ Specifing image file as parameter, it can plots on behalf of sample.jpg.
 - matplotlib
 - Pillow
 - The Python Standard Library
-  - datetime
-  - json
-  - sys
+  - datetime, decimal, json, math, sys
 
 ## 制限事項 Restictions
 
@@ -88,10 +86,10 @@ t points each RGB value and takes normalized value from 0.0 to 1.0.
 ## ベンチマーク Speed benchmark
 
 下表はある時点のソースを用いて、Raspberry Pi 2 で実行にかかった時間（時間計測を行っている出力の期間）を記す。
-なお、Out of order に対応した 今時のそこそこのCPU環境( Core i7、 Rapberry Pi 4、Jetson nanoなど)ではコード完成初期バージョンですら、2～3秒程度で終わってしまうので、割愛。
+なお、アウトオブオーダー実行 に対応した 今時のそこそこのCPU環境( Core i7、 Rapberry Pi 4、Jetson nanoなど)ではコード完成初期バージョンですら、2～3秒程度で終わってしまうので、割愛。
 
 Followings are benchmark data for taking time on Raspberry Pi2.
-BTW, it takes 3 or less seconds on recent major CPUs(Intel Core i7 / Raspberry Pi4 / Jetson Nano) using initial version. Because these CPUs have function called out of order.
+BTW, it takes 3 or less seconds on recent major CPUs(Intel Core i7 / Raspberry Pi4 / Jetson Nano) using initial version. Because these CPUs have function called out-of-order execution and it looks it's efficient for a massive data and calculation.
 
 | date of codes | elapsed time | memo |
 | :---: | ---: | :--- |
